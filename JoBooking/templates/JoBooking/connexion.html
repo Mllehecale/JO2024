@@ -1,1 +1,10 @@
-<h1>connexion</h1>
+{% extends 'index.html' %}
+{% block content %}
+<p>{{message}}</p>
+<form  method="POST">
+    {{form.as_p}}
+    {% csrf_token %}
+    <input type="submit" value="Se connecter">
+
+</form>
+{% endblock content %}
