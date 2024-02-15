@@ -3,6 +3,13 @@ from django.contrib.auth import login
 from .authentification import CustomAuthentification
 from .forms import Connexion
 from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
+
+
+class CustomSignupForm(UserCreationForm):
+    class Meta:
+        model = CustomUser  # ici on spécifie qu'on veut ce modèle personnalisé
+        fields = ('last_name', 'first_name', 'email',)
 
 
 def index(request):
@@ -14,8 +21,23 @@ def offres(request):
 
 
 def inscription(request):
-    form = UserCreationForm()
-    return render(request, 'JoBooking/inscription.html',context={'form':form})
+    context = {}  # stockage données  lors du rendu de page
+
+    if request.method == 'POST':  # vérification methode de la requête est POST = formulaire soumis
+        form = CustomSignupForm(request.POST)  # création formulaire avec données POST
+        if form.is_valid():  # vérification  de la validité des données
+            form.save()  # sauvegarde dans la BDD
+            return redirect('inscription_reussie')  # redirection de l'utilisateur vers une autre page
+        else:
+            context['errors'] = form.errors  # erreur de validation
+
+    form = CustomSignupForm()  # nouvelle page d'inscription vide  donc sans POST
+    context['form'] = form
+    return render(request, 'JoBooking/inscription.html', context=context)  # renvoie page d'inscription
+
+
+def inscription_reussie(request):
+    return render(request, 'inscription_reussie.html')
 
 
 def connexion(request):
