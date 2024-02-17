@@ -123,6 +123,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'JoBooking.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
-    'JoBooking.authentification.CustomAuthentification',
-    'django.contrib.auth.backends.ModelBackend'
+    'django.contrib.auth.backends.ModelBackend',
+    'JoBooking.authbackends.EmailAuthBackend',
 ]

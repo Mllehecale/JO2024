@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from .authentification import CustomAuthentification
 from .forms import Connexion
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from .authbackends import EmailAuthBackend
 
 
 class CustomSignupForm(UserCreationForm):
@@ -48,16 +48,16 @@ def connexion(request):
             email = form.cleaned_data['email']  # données nettoyées et récupérées
             password = form.cleaned_data['password']
 
-            custom_auth = CustomAuthentification()  # implémentation de l'authentification personnalisée
+            custom_auth = EmailAuthBackend()  # implémentation de l'authentification personnalisée
             user = custom_auth.authenticate(request, email=email, password=password)  # appel de la méthode authenticate
 
             # email = request.POST.get('email')
             # password = request.POST.get('password')
 
-            if user is not None:  # signification : si l'user a été trouvée ...
-                login(request, user)  # pour connecter l'user
-                message = f'Bienvenue {user.name} ! Vous êtes connecté.'
-                return redirect('index.html')
+            if user is not None and password is not None:  # signification : si l'user a été trouvée ...
+                login(request, user, backend='JoBooking.authbackends.EmailAuthBackend')  #ya 2 backends d'auth
+                message = f'Bienvenue {user.first_name} ! Vous êtes connecté.'
+                return redirect('/') #redirige vers la page d'acceuil
             else:
                 message = 'Identifiants non valides.'
                 return render(request, 'connexion.html')  # user non trouvé, donc retourne page connexion
