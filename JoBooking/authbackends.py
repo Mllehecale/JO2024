@@ -2,6 +2,8 @@ from .models import CustomUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.backends import BaseBackend
 
+""" méthode d'une authentification personnalisée . Elle  vérifie l'email et le mot de passe des utilisateurs 
+qui sont récupérés à partir de leur identifiant (id) """
 
 class EmailAuthBackend(BaseBackend):
     def authenticate(self,request, email=None, password=None):

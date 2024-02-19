@@ -23,7 +23,7 @@ class UserCreationForm(forms.ModelForm):
 
 class AdminInterface(BaseUserAdmin):
     login_form = UserCreationForm
-    list_display = ('email', 'first_name', 'last_name','is_staff')
+    list_display = ('email', 'first_name', 'last_name', 'is_staff')
 
 
 admin.site.register(CustomUser, AdminInterface)
