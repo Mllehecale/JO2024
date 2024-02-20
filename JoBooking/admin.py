@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import CustomUser
+from .models import CustomUser, Offre
 
 
 class UserCreationForm(forms.ModelForm):
@@ -26,4 +26,9 @@ class AdminInterface(BaseUserAdmin):
     list_display = ('email', 'first_name', 'last_name', 'is_staff')
 
 
-admin.site.register(CustomUser, AdminInterface)
+class AdminOffre(admin.ModelAdmin):
+    list_display = ('title', 'price', 'billet', 'ventes')
+
+
+admin.site.register(CustomUser, AdminInterface, )
+admin.site.register(Offre, AdminOffre)

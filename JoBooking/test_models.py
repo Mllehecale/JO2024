@@ -21,3 +21,4 @@ class TestCustomUserManager(TestCase):
         self.assertEqual(user1.is_superuser, False)
         self.assertEqual(user1.is_active, True)
         self.assertEqual(user1.is_staff, False)
+# test creation user avec données invalides

@@ -48,12 +48,28 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
+        """Does the user have a specific permission?"""
         # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
+        """Does the user have permissions to view the app `app_label`?"""
         # Simplest possible answer: Yes, always
         return True
 
+
+#  méthode pour créer les offres des jeux olympiques + compteur de ventes pour chaque offre
+
+class Offre(models.Model):
+    title = models.CharField(max_length=100)
+    price = models.FloatField()
+    description = models.TextField()
+    billet = models.IntegerField(default=1)
+    ventes = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.title
+
+    def ajout_vente(self):
+        self.ventes += 1
+        self.save()
