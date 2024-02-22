@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from .forms import Connexion
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, Offre
 from .authbackends import EmailAuthBackend
+from django.contrib.auth.decorators import login_required
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
@@ -20,7 +21,9 @@ def index(request):
 
 # view pour la page des offres
 def offres(request):
-    return render(request, 'JoBooking/offres.html')
+    offres = Offre.objects.all()  # affiche toutes les offres  = plan solo,duo,family ou autre
+    context = {'offres': offres}
+    return render(request, 'JoBooking/offres.html', context)
 
 
 # view pour la page d'inscription
@@ -66,8 +69,20 @@ def connexion(request):
                 return redirect('/')  # redirige vers la page d'acceuil
             else:
                 message = 'Identifiants non valides.'
-                return render(request, 'connexion.html')  # user non trouvé, donc retourne page connexion
+                return render(request, 'connexion.html',context={'message':message})  # user non trouvé, donc retourne page connexion
     else:
         form = Connexion()
 
     return render(request, 'connexion.html', context={'form': form, 'message': message})
+
+
+# méthode pour que les users se déconnecte
+def deconnexion(request):
+    logout(request)
+    return redirect('index')
+
+
+# methode qui renvoie  à la page de reservation (c'est la page panier, après avoir réserver)
+@login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
+def reservation(request):
+    return render(request, 'reservation.html')

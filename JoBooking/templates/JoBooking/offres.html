@@ -1,1 +1,16 @@
-<h1>Offres</h1>
+{% block content %}
+<div>
+    <h2>OFFRES</h2>
+</div>
+
+{% for offre in offres %}
+<ul>
+    <li>{{offre.title}}</li>
+    <li>{{offre.description}}</li>
+    <li>{{offre.price}}</li>
+</ul>
+<a href="{% url 'reservation' %}">Réserver</a>
+
+{% endfor %}
+
+{% endblock content %}

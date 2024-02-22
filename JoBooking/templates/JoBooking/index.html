@@ -6,6 +6,16 @@
     <title>Jeux Olympiques France</title>
 </head>
 <body>
+<a href="{% url 'reservation' %}">🧺Réservation({{user.reservation.commandes.count}})</a>
+{% if user.is_authenticated %}
+<p>Bienvenue,{{user.first_name}} !</p>
+<a href="{% url 'deconnexion' %}">Déconnexion</a>
+{% else %}
+<a href="{% url 'connexion' %}">Se connecter</a>
+{% endif %}
+
+
+
 {% block content %}
 {% endblock content %}
 

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import CustomUser, Offre
+from .models import CustomUser, Offre, Commande, Reservation
 
 
 class UserCreationForm(forms.ModelForm):
@@ -21,14 +21,25 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
+# l'ajout de ModelADmin permet la personnalisation de l'affichage sur l'interface
 class AdminInterface(BaseUserAdmin):
     login_form = UserCreationForm
     list_display = ('email', 'first_name', 'last_name', 'is_staff')
 
 
 class AdminOffre(admin.ModelAdmin):
-    list_display = ('title', 'price', 'billet', 'ventes')
+    list_display = ('id', 'title', 'price', 'billet', 'ventes')
+
+
+class AdminCommande(admin.ModelAdmin):
+    list_display = ('user', 'offre', 'quantity')
+
+
+class AdminReservation(admin.ModelAdmin):
+    list_display = ('user', 'commandes_list', 'paiement', 'date_commande')
 
 
 admin.site.register(CustomUser, AdminInterface, )
 admin.site.register(Offre, AdminOffre)
+admin.site.register(Commande, AdminCommande)
+admin.site.register(Reservation, AdminReservation)
