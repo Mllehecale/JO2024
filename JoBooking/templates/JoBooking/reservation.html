@@ -1,1 +1,14 @@
-<h1>réservation</h1>
+{% block content %}
+<div>
+    <h1>Réservation</h1>
+</div>
+
+{% for commande in commandes %}
+<h2>{{commande.offre.title}}</h2>
+<h3>{{commande.offre.price}}</h3>
+<p>quantité:{{commande.quantity}}</p>
+
+{% endfor %}
+<a href="{% url 'annulation' %}">Annuler la réservation</a>
+
+{% endblock content %}

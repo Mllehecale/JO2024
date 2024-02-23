@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import Connexion
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, Offre
+from .models import CustomUser, Offre, Reservation, Commande
 from .authbackends import EmailAuthBackend
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
@@ -69,7 +70,8 @@ def connexion(request):
                 return redirect('/')  # redirige vers la page d'acceuil
             else:
                 message = 'Identifiants non valides.'
-                return render(request, 'connexion.html',context={'message':message})  # user non trouvé, donc retourne page connexion
+                return render(request, 'connexion.html',
+                              context={'message': message})  # user non trouvé, donc retourne page connexion
     else:
         form = Connexion()
 
@@ -82,7 +84,59 @@ def deconnexion(request):
     return redirect('index')
 
 
-# methode qui renvoie  à la page de reservation (c'est la page panier, après avoir réserver)
+# méthode pour ajouter à réservation. ( réservation c'est le panier. J'ai volontairement choisi ce terme)
+def ajouter_reservation(request, offre_id):
+    user = request.user
+    offre = get_object_or_404(Offre, id=offre_id)  # ici on récupère l'offre si inexistante,erreur 404
+    reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
+    commande, created = Commande.objects.get_or_create(user=user,
+                                                       offre=offre)  # récupération commande
+
+    if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
+        reservation.commandes.add(commande)
+        reservation.save()
+    else:  # l'offre est deja dans la commande donc on augmente la quantité
+        commande.quantity += 1
+        commande.save()
+    return redirect('offres')
+
+
+#  renvoie  à la page de reservation (c'est la page panier, après avoir réserver)
 @login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
 def reservation(request):
-    return render(request, 'reservation.html')
+    reservation = get_object_or_404(Reservation, user=request.user)
+    return render(request, 'reservation.html', context={
+        'commandes': reservation.commandes.all()})  # affiche tous les éléments qu'ya dans la réservation
+
+
+# methode pour annuler une réservation au complet
+def annulation(request):
+    reservation = request.user.reservation
+    if reservation:  # si elle existe
+        reservation.commandes.all().delete()
+        reservation.delete()  # suppression de tout ce qu'y a dans la réservation qu'on supprime ensuite
+
+    return redirect('index')  # retourne vers la page d'accueil
+
+
+def payer(request):
+    reservation = request.user.reservation
+
+    #génération de clé unique pour paiment
+    #génération de billets (combinaison des deux clés générées  uuid , qr code, nom et présnom de acheteur + logo   ;date de l'evement )
+    #augmentation de ventes de Offre selon la quantité achetée
+
+
+    for commande in reservation.commandes.all():
+        offre = commande.offre #récupration du plan dans la commande
+        offre.ventes += commande.quantity
+        offre.save()
+    # paiement dans Reservation devient TRUE
+    reservation.paiement=True
+    reservation.save()
+    # le panier (réservation ) est réinitialisé
+    reservation.commandes.clear()
+    #Renvoie à la page de remerciement où on peut telecharger billet
+    return render('remerciements')
+
+

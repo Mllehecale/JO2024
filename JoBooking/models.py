@@ -99,4 +99,5 @@ class Reservation(models.Model):
         return '|'.join(commande.offre.title for commande in self.commandes.all())
 
     def __str__(self):
-        return self.user.email  # l'email est une donnée unique
+        return self.user.email  # rappel : l'email est une donnée unique
+
