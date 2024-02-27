@@ -33,6 +33,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    cle_inscription = models.CharField(max_length=100,blank=True,unique=True,null=True)
+
 
     objects = CustomUserManager()  # relie la classe CustomuserManager à ce modèle
 
@@ -92,6 +94,7 @@ class Reservation(models.Model):
     commandes = models.ManyToManyField(Commande)
     paiement = models.BooleanField(default=False)
     date_commande = models.DateTimeField(blank=True, null=True)
+    cle_paiement = models.CharField(max_length=100,unique=True,blank=True,null=True)
 
     # champs ManyToManyField non pris en charge pour champ interface admin donc voici une méthode personnalisée
     # sinon retourne ERROR  (admin.E109)

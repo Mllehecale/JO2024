@@ -6,13 +6,14 @@ from .models import CustomUser, Offre, Reservation, Commande
 from .authbackends import EmailAuthBackend
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+import uuid
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
 class CustomSignupForm(UserCreationForm):
     class Meta:
         model = CustomUser  # ici on spécifie qu'on veut ce modèle personnalisé
-        fields = ('first_name', 'last_name', 'email',)
+        fields = ('first_name', 'last_name', 'email')
 
 
 # view pour la page d'accueil
@@ -33,8 +34,11 @@ def inscription(request):
 
     if request.method == 'POST':  # vérification methode de la requête est POST = formulaire soumis
         form = CustomSignupForm(request.POST)  # création formulaire avec données POST
-        if form.is_valid():  # vérification  de la validité des données
-            form.save()  # sauvegarde dans la BDD
+        if form.is_valid(): # vérification  de la validité des données
+            user = form.save()  # sauvegarde dans la BDD
+            user.cle_inscription = uuid.uuid4().hex
+            user.save()
+
             return redirect('inscription_reussie')  # redirection de l'utilisateur vers une autre page
         else:
             context['errors'] = form.errors  # erreur de validation
@@ -122,21 +126,24 @@ def annulation(request):
 def payer(request):
     reservation = request.user.reservation
 
-    #génération de clé unique pour paiment
-    #génération de billets (combinaison des deux clés générées  uuid , qr code, nom et présnom de acheteur + logo   ;date de l'evement )
-    #augmentation de ventes de Offre selon la quantité achetée
+    # génération de billets (combinaison des deux clés générées , qr code, nom acheteur + logo ;date de l'evement )
 
-
+    # augmentation de ventes de Offre selon la quantité achetée
     for commande in reservation.commandes.all():
-        offre = commande.offre #récupration du plan dans la commande
+        offre = commande.offre  # récupration du plan dans la commande
         offre.ventes += commande.quantity
         offre.save()
-    # paiement dans Reservation devient TRUE
-    reservation.paiement=True
+    # paiement dans Reservation devient TRUE (initialement à FALSE)
+    reservation.paiement = True
     reservation.save()
+
+    # génération de clé unique pour paiment seulement si payer.
+    if reservation.paiement == True:
+        cle_paiement = uuid.uuid4().hex
+        reservation.cle_paiement = cle_paiement
+        reservation.save()
+
     # le panier (réservation ) est réinitialisé
     reservation.commandes.clear()
-    #Renvoie à la page de remerciement où on peut telecharger billet
+    # Renvoie à la page de remerciement où on peut telecharger billet
     return render('remerciements')
-
-
