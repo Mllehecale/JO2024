@@ -13,6 +13,7 @@ urlpatterns = [
     path("offres/<str:offre_id>/ajouter_reservation", views.ajouter_reservation, name="ajouter_reservation"),
     path("reservation/", views.reservation, name="reservation"),
     path("reservation/annulation", views.annulation, name="annulation"),
-    path("remerciements/", views.payer, name="payer"),
+    path("reservation/payer", views.payer, name="payer"),
+    path("reservation/remerciements", views.remerciements, name="remerciements"),
 
 ]

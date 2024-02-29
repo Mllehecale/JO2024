@@ -146,4 +146,7 @@ def payer(request):
     # le panier (réservation ) est réinitialisé
     reservation.commandes.clear()
     # Renvoie à la page de remerciement où on peut telecharger billet
-    return render('remerciements')
+    return redirect ('remerciements')
+
+def remerciements(request):
+    return render(request,'remerciements.html')
