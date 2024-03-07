@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,10 +16,14 @@
 <a href="{% url 'connexion' %}">Se connecter</a>
 {% endif %}
 
-
-
+<!-- block pour contenu spécifique à la page-->
 {% block content %}
 {% endblock content %}
+
+<!-- block pour js specifique à la page ,réutilisable-->
+{% block js %}
+<script src="{% static 'JoBooking/script.js' %}"></script>
+{% endblock %}
 
 </body>
 </html>

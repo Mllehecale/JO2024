@@ -23,8 +23,8 @@ def index(request):
 
 # view pour la page des offres
 def offres(request):
-    offres = Offre.objects.all()  # affiche toutes les offres  = plan solo,duo,family ou autre
-    context = {'offres': offres}
+    list_offres = Offre.objects.all()  # affiche toutes les offres  = plan solo,duo,family ou autre
+    context = {'offres': list_offres}
     return render(request, 'JoBooking/offres.html', context)
 
 
@@ -34,7 +34,7 @@ def inscription(request):
 
     if request.method == 'POST':  # vérification methode de la requête est POST = formulaire soumis
         form = CustomSignupForm(request.POST)  # création formulaire avec données POST
-        if form.is_valid(): # vérification  de la validité des données
+        if form.is_valid():  # vérification  de la validité des données
             user = form.save()  # sauvegarde dans la BDD
             user.cle_inscription = uuid.uuid4().hex
             user.save()
@@ -115,10 +115,10 @@ def reservation(request):
 
 # methode pour annuler une réservation au complet
 def annulation(request):
-    reservation = request.user.reservation
-    if reservation:  # si elle existe
-        reservation.commandes.all().delete()
-        reservation.delete()  # suppression de tout ce qu'y a dans la réservation qu'on supprime ensuite
+    user_reservation = Reservation.objects.get(user=request.user)
+    if user_reservation:  # si elle existe
+        user_reservation.commandes.all().delete()
+        user_reservation.delete()  # suppression de tout ce qu'y a dans la réservation qu'on supprime ensuite
 
     return redirect('index')  # retourne vers la page d'accueil
 
@@ -146,7 +146,8 @@ def payer(request):
     # le panier (réservation ) est réinitialisé
     reservation.commandes.clear()
     # Renvoie à la page de remerciement où on peut telecharger billet
-    return redirect ('remerciements')
+    return redirect('remerciements')
+
 
 def remerciements(request):
-    return render(request,'remerciements.html')
+    return render(request, 'remerciements.html')

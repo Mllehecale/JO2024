@@ -3,7 +3,7 @@ from django.db import models
 from django.conf import settings
 
 
-# méthode pour créer  user personnalisé
+# modele  pour créer  user personnalisé
 class CustomUserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:  # vérifie si l'email est saisi
@@ -33,8 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    cle_inscription = models.CharField(max_length=100,blank=True,unique=True,null=True)
-
+    cle_inscription = models.CharField(max_length=100, blank=True, unique=True, null=True)
 
     objects = CustomUserManager()  # relie la classe CustomuserManager à ce modèle
 
@@ -61,7 +60,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return True
 
 
-#  méthode pour créer les offres des jeux olympiques + compteur de ventes pour chaque offre
+#  modele pour créer les offres des jeux olympiques + compteur de ventes pour chaque offre
 
 class Offre(models.Model):
     title = models.CharField(max_length=100)
@@ -94,7 +93,7 @@ class Reservation(models.Model):
     commandes = models.ManyToManyField(Commande)
     paiement = models.BooleanField(default=False)
     date_commande = models.DateTimeField(blank=True, null=True)
-    cle_paiement = models.CharField(max_length=100,unique=True,blank=True,null=True)
+    cle_paiement = models.CharField(max_length=100, unique=True, blank=True, null=True)
 
     # champs ManyToManyField non pris en charge pour champ interface admin donc voici une méthode personnalisée
     # sinon retourne ERROR  (admin.E109)
@@ -103,4 +102,3 @@ class Reservation(models.Model):
 
     def __str__(self):
         return self.user.email  # rappel : l'email est une donnée unique
-
