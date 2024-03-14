@@ -1,5 +1,5 @@
 from django.test import TestCase
-from JoParis.JoBooking.models import CustomUser
+from JoBooking.models import CustomUser
 
 
 # test inscription avec données valides et obligatoires
