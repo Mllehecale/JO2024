@@ -15,6 +15,11 @@ class CustomSignupForm(UserCreationForm):
         model = CustomUser  # ici on spécifie qu'on veut ce modèle personnalisé
         fields = ('first_name', 'last_name', 'email')
 
+    # a coder soulever erreur si mail non valide(sans@)  ou vide
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].required = True
+
 
 # view pour la page d'accueil
 def index(request):
@@ -36,7 +41,7 @@ def inscription(request):
         form = CustomSignupForm(request.POST)  # création formulaire avec données POST
         if form.is_valid():  # vérification  de la validité des données
             user = form.save()  # sauvegarde dans la BDD
-            user.cle_inscription = uuid.uuid4().hex
+            user.cle_inscription = uuid.uuid4().hex  # generation clé d'inscription
             user.save()
 
             return redirect('inscription_reussie')  # redirection de l'utilisateur vers une autre page
@@ -68,7 +73,7 @@ def connexion(request):
             # email = request.POST.get('email')
             # password = request.POST.get('password')
 
-            if user is not None and password is not None:  # signification : si l'user a été trouvée ...
+            if user is not None:  # signification : si l'user a été trouvée ...
                 login(request, user, backend='JoBooking.authbackends.EmailAuthBackend')  # ya 2 backends d'auth
                 message = f'Bienvenue {user.first_name} ! Vous êtes connecté.'
                 return redirect('/')  # redirige vers la page d'acceuil

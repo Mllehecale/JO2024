@@ -14,8 +14,7 @@ class EmailAuthBackend(BaseBackend):
             else:
                 return None
         except ObjectDoesNotExist:
-            raise ValueError("email invalide")
-
+            return None
 
     def get_user(self, user_id):
         try:

@@ -7,7 +7,9 @@ from django.conf import settings
 class CustomUserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:  # vérifie si l'email est saisi
-            raise ValueError("Vous devez entrer un email valide.")
+            raise ValueError("Vous devez entrer un email.")
+        if "@" not in email:
+            raise ValueError("Veuillez entrer un email valide.")
         email = self.normalize_email(email)  # email en minuscule
         user = self.model(email=email, **extra_fields)  # création d'une instance
         user.set_password(password)  # définition du Mot de passe , méthode pour ne pas l'afficher en clair dans BDD

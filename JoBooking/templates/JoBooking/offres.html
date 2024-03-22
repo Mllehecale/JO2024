@@ -11,6 +11,7 @@
     <li>{{offre.price}}</li>
 </ul>
 {% if user.is_authenticated %}
+    <button class="btn-reservation" data-offre-id="{{ offre.id }}">Réserver</button>
 <a href="{% url 'ajouter_reservation' offre.id %}">Réserver</a>
 {%else%}
 <a href="{% url 'connexion' %}"></a>
@@ -20,3 +21,7 @@
 {% endfor %}
 
 {% endblock content %}
+
+{% block js %}
+<script src="{% static 'JoBooking/script.js' %}"></script>
+{% endblock %}
