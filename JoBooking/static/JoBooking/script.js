@@ -3,9 +3,9 @@ console.log('hello');  // pour vérifier si affiche sur la console
 // fonction pour récupérer panier dans localStorage
 function getPanier(){
     let panier= localStorage.getItem('panier');
-
-    if (panier===null){
-        return [];
+//  si le panier existe pas
+    if (panier===null || panier===''){
+        return {};
     }else{
         return JSON.parse(panier);
     }
@@ -18,20 +18,39 @@ function savePanier(panier){
 // fonction qui ajoute au panier + sauvegarde
 function addOffre(offre){
     let panier=getPanier();
-    let findOffre=panier.find(p =>p.id===offre.id);
+    console.log('panier actuel;',panier)
+    if (panier[offre.id]){
+        console.log('déja dans panier',panier[offre.id] );
+        panier[offre.id].quantity +=1;
+    //let findOffre=panier.find(p =>p.id===offre.id);
 
-    if(findOffre){
-        findOffre.quantity+=1;
+    //if(findOffre){
+        //findOffre.quantity+=1;
+    //}else{
+        //offre.quantity=1;
+        //panier.push(offre);
     }else{
-        offre.quantity=1;
-        panier.push(offre);
+        panier[offre.id]={
+            id:offre.id,
+            quantity:1
+        };
+
     }
     savePanier(panier);
 }
 
-// Récupérer du bouton de réservation
-const boutonReserver= document.querySelector('.btn-reservation');
+// Récupérer  bouton de réservation
+const boutonsReserver= document.querySelectorAll('.btn-reservation');
 //Gestionnaire d'événement sur le clique
-boutonReserver.addEventListener('click',function (){
-    const offre = this.getAttribute('data-offre-id');
-})
+boutonsReserver.forEach(bouton=>{
+    bouton.addEventListener('click',function (){
+        console.log('bouton "réserver" fonctionne')
+
+    const offreId = this.getAttribute('data-offre-id');
+    const offre ={id:offreId};
+    addOffre(offre);
+});
+
+    }
+
+);
