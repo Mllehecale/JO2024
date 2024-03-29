@@ -3,6 +3,7 @@
     <h1>Réservation</h1>
 </div>
 
+{% if commandes %}
 {% for commande in commandes %}
 <h2>{{commande.offre.title}}</h2>
 <h3>{{commande.offre.price}}</h3>
@@ -11,6 +12,7 @@
 {% endfor %}
 <a href="{% url 'annulation' %}">Annuler la réservation</a> <br>
 <a href="{% url 'payer' %}">Valider la commande </a>
-
-
+{% else %}
+    <p>Aucun élément dans le panier</p>
+{% endif %}
 {% endblock content %}

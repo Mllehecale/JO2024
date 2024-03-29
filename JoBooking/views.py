@@ -127,23 +127,27 @@ def reservation(request):
     if request.method == 'POST':
         user = request.user
         panier_data = json.loads(request.body)
-        print('données envoyés par front:',panier_data)
-        reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
+        print('données envoyés par front:', panier_data)
+        if 'panier' in panier_data:
+            reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
 
-        for offre_data in panier_data['panier']:
-            offre_id = offre_data('id')
-            offre = offre_id
-        commande, created = Commande.objects.get_or_create(user=user,
-                                                           offre=offre)  # récupération commande
+            for offre_id, offre_data in panier_data['panier'].items():
+                offre_id = offre_data['id']
+                offre_quantity = offre_data['quantity']
+                commande, created = Commande.objects.get_or_create(user=user,
+                                                                   offre_id=offre_id)  # récupération commande
 
-        if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
-            reservation.commandes.add(commande)
+                if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
+                    reservation.commandes.add(commande)
+                else:  # l'offre est deja dans la commande donc on augmente la quantité
+                    commande.quantity += offre_quantity
+                    commande.save()
             reservation.save()
-        else:  # l'offre est deja dans la commande donc on augmente la quantité
-            commande.quantity += 1
-            commande.save()
+    try :
+        reservation=Reservation.objects.get(user=request.user)  # vérification existance réservation
+    except Reservation.DoesNotExist:
+        return render(request,'Panier_vide.html')
 
-    reservation = get_object_or_404(Reservation, user=request.user)
     return render(request, 'reservation.html', context={
         'commandes': reservation.commandes.all()})  # affiche tous les éléments qu'ya dans la réservation
 
