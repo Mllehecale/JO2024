@@ -7,13 +7,12 @@
 
 {% for offre in offres %}
 <ul>
-    <li>{{offre.title}}</li>
+    <li id="aa{{ offre.id }}">{{offre.title}}</li>   <!-- id = id de l'object mais comme déja utilisé ajout de "aa" pour identifiant unique -->
     <li>{{offre.description}}</li>
     <li>{{offre.price}}</li>
 </ul>
 {% if user.is_authenticated %}
     <button class="btn-reservation" data-offre-id="{{ offre.id }}">Réserver</button>
-<!-- <a href="{% url 'ajouter_reservation' offre.id %}">Réserver</a> -->
 {%else%}
 <a href="{% url 'connexion' %}"></a>
 {% endif %}

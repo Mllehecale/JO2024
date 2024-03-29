@@ -8,7 +8,7 @@
     <title>Jeux Olympiques France</title>
 </head>
 <body>
-<a href="{% url 'reservation' %}">🧺Réservation({{user.reservation.commandes.count}})</a>
+<a href="{% url 'reservation' %}" id="nombre-reservation">🧺Réservation</a>
 {% if user.is_authenticated %}
 <p>Bienvenue,{{user.first_name}} !</p>
 <a href="{% url 'deconnexion' %}">Déconnexion</a>

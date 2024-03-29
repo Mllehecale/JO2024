@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import Connexion
@@ -7,6 +9,7 @@ from .authbackends import EmailAuthBackend
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 import uuid
+import json
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
@@ -94,25 +97,52 @@ def deconnexion(request):
 
 
 # méthode pour ajouter à réservation. ( réservation c'est le panier. J'ai volontairement choisi ce terme)
-def ajouter_reservation(request, offre_id):
-    user = request.user
-    offre = get_object_or_404(Offre, id=offre_id)  # ici on récupère l'offre si inexistante,erreur 404
-    reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
-    commande, created = Commande.objects.get_or_create(user=user,
-                                                       offre=offre)  # récupération commande
+"""def ajouter_reservation(request):
+    if request.method == 'POST':
+        user = request.user
+        panier_data = json.loads(request.body)
 
-    if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
-        reservation.commandes.add(commande)
-        reservation.save()
-    else:  # l'offre est deja dans la commande donc on augmente la quantité
-        commande.quantity += 1
-        commande.save()
-    return redirect('offres')
+
+        reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
+
+        for offre_data in panier_data.values():
+            offre_id = offre_data['id']
+            offre = offre_id
+        commande, created = Commande.objects.get_or_create(user=user,
+                                                           offre=offre)  # récupération commande
+
+        if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
+            reservation.commandes.add(commande)
+            reservation.save()
+        else:  # l'offre est deja dans la commande donc on augmente la quantité
+            commande.quantity += 1
+            commande.save()
+
+        #return redirect('offres')"""
 
 
 #  renvoie  à la page de reservation (c'est la page panier, après avoir réserver)
 @login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
 def reservation(request):
+    if request.method == 'POST':
+        user = request.user
+        panier_data = json.loads(request.body)
+        print('données envoyés par front:',panier_data)
+        reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
+
+        for offre_data in panier_data['panier']:
+            offre_id = offre_data('id')
+            offre = offre_id
+        commande, created = Commande.objects.get_or_create(user=user,
+                                                           offre=offre)  # récupération commande
+
+        if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
+            reservation.commandes.add(commande)
+            reservation.save()
+        else:  # l'offre est deja dans la commande donc on augmente la quantité
+            commande.quantity += 1
+            commande.save()
+
     reservation = get_object_or_404(Reservation, user=request.user)
     return render(request, 'reservation.html', context={
         'commandes': reservation.commandes.all()})  # affiche tous les éléments qu'ya dans la réservation
