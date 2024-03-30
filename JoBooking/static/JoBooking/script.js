@@ -1,4 +1,4 @@
-console.log('hello');  // pour vérifier si affiche sur la console
+console.log('hello');  // pour vérifier si script reconnu
 
 // fonction pour récupérer panier dans localStorage
 function getPanier(){
@@ -10,9 +10,15 @@ function getPanier(){
         return JSON.parse(panier);
     }
 }
-// fonction enregistrement panier dans LocalStorage
+// fonction pour enregistrer panier dans LocalStorage
 function savePanier(panier){
     localStorage.setItem('panier',JSON.stringify(panier));
+}
+
+
+// fonction pour supprimer panier dans LocalStorage
+function deletePanier(){
+    localStorage.removeItem('panier');
 }
 
 
@@ -24,7 +30,7 @@ function nombreReservation(){
     document.getElementById('nombre-reservation').innerText=`🧺Réservation(${nombredeReservation})`;
 }
 
-// pour s'assurer du chargement du DOM
+// fonction  pour s'assurer du chargement du DOM
 document.addEventListener('DOMContentLoaded',function (){
     nombreReservation();
 });
@@ -38,13 +44,6 @@ document.addEventListener('DOMContentLoaded',function (){
         if (panier[offre.id]) {
             console.log('déja dans panier', panier[offre.id]);
             panier[offre.id].quantity += 1;
-            //let findOffre=panier.find(p =>p.id===offre.id);
-
-            //if(findOffre){
-            //findOffre.quantity+=1;
-            //}else{
-            //offre.quantity=1;
-            //panier.push(offre);
         } else {
             panier[offre.id] = {
                 id: offre.id,
@@ -56,7 +55,7 @@ document.addEventListener('DOMContentLoaded',function (){
         nombreReservation();
     }
 
-// acquisition token    code  source  django documentation
+// acquisition token    code source :django documentation
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -95,9 +94,7 @@ function dataPanier(){
 }
 
 
-
-
-
+// BOUTON DE RESERVATION
 // Récupérer chaque bouton de réservation
     const boutonsReserver = document.querySelectorAll('.btn-reservation');
 //Gestionnaire d'événement sur le clique
@@ -115,3 +112,12 @@ function dataPanier(){
 
         }
         );
+
+
+// BOUTON D ANNULATION
+const boutonAnnulation = document.querySelector('.btn-annuler');
+boutonAnnulation.addEventListener('click',function (){
+    console.log('bouton annuler opérationnel ! ')
+    deletePanier();
+    window.location.href='annulation';
+})

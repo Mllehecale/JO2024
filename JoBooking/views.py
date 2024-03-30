@@ -95,32 +95,6 @@ def deconnexion(request):
     logout(request)
     return redirect('index')
 
-
-# méthode pour ajouter à réservation. ( réservation c'est le panier. J'ai volontairement choisi ce terme)
-"""def ajouter_reservation(request):
-    if request.method == 'POST':
-        user = request.user
-        panier_data = json.loads(request.body)
-
-
-        reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
-
-        for offre_data in panier_data.values():
-            offre_id = offre_data['id']
-            offre = offre_id
-        commande, created = Commande.objects.get_or_create(user=user,
-                                                           offre=offre)  # récupération commande
-
-        if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
-            reservation.commandes.add(commande)
-            reservation.save()
-        else:  # l'offre est deja dans la commande donc on augmente la quantité
-            commande.quantity += 1
-            commande.save()
-
-        #return redirect('offres')"""
-
-
 #  renvoie  à la page de reservation (c'est la page panier, après avoir réserver)
 @login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
 def reservation(request):
@@ -149,7 +123,7 @@ def reservation(request):
         return render(request,'Panier_vide.html')
 
     return render(request, 'reservation.html', context={
-        'commandes': reservation.commandes.all()})  # affiche tous les éléments qu'ya dans la réservation
+        'commandes': reservation.commandes.all()})  # affiche tous les éléments qu'ya dans la réservation si existe
 
 
 # methode pour annuler une réservation au complet

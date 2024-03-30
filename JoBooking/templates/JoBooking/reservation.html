@@ -1,3 +1,6 @@
+{% load static %}
+
+
 {% block content %}
 <div>
     <h1>Réservation</h1>
@@ -11,8 +14,13 @@
 
 {% endfor %}
 <a href="{% url 'annulation' %}">Annuler la réservation</a> <br>
+<button class="btn-annuler">Annuler</button>
 <a href="{% url 'payer' %}">Valider la commande </a>
 {% else %}
     <p>Aucun élément dans le panier</p>
 {% endif %}
 {% endblock content %}
+
+{% block js %}
+<script src="{% static 'JoBooking/script.js' %}"></script>
+{% endblock %}
