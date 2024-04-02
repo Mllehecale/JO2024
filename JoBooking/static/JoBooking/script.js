@@ -27,7 +27,10 @@ function nombreReservation(){
     const panier = getPanier();
     const nombredeReservation=Object.keys(panier).length;
     console.log('nombre de réservations:',nombredeReservation);
-    document.getElementById('nombre-reservation').innerText=`🧺Réservation(${nombredeReservation})`;
+    if (nombredeReservation!==null){
+            document.getElementById('nombre-reservation').innerText=`🧺Réservation(${nombredeReservation})`;
+
+    }
 }
 
 // fonction  pour s'assurer du chargement du DOM
@@ -47,7 +50,7 @@ document.addEventListener('DOMContentLoaded',function (){
         } else {
             panier[offre.id] = {
                 id: offre.id,
-                quantity: 1
+                quantity :offre.quantity
             };
 
         }
@@ -120,4 +123,12 @@ boutonAnnulation.addEventListener('click',function (){
     console.log('bouton annuler opérationnel ! ')
     deletePanier();
     window.location.href='annulation';
+})
+
+//BOUTON PAIEMENT
+const boutonPaiement = document.querySelector('.btn-valider');
+boutonPaiement.addEventListener('click',function (){
+    console.log('bouton valider opérationnel ! ')
+    deletePanier();
+    window.location.href='payer';
 })

@@ -13,8 +13,9 @@
 <p>quantité:{{commande.quantity}}</p>
 
 {% endfor %}
-<a href="{% url 'annulation' %}">Annuler la réservation</a> <br>
 <button class="btn-annuler">Annuler</button>
+<button class="btn-valider">Valider la commande</button>
+
 <a href="{% url 'payer' %}">Valider la commande </a>
 {% else %}
     <p>Aucun élément dans le panier</p>
