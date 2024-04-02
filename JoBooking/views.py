@@ -11,6 +11,7 @@ import json
 from fpdf import FPDF
 import PyPDF2
 from django.http import HttpResponse
+import qrcode
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
@@ -141,33 +142,15 @@ def annulation(request):
     return redirect('index')  # retourne vers la page d'accueil
 
 
-# création billets  téléchargeables + qr code
-def creation_billet(user, offre, date):
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font('helvetica', size=12)
-
-    for billet in range(offre.billet):
-        pdf.cell(0, 10, text="_______________________________________________________________________________", ln=True, align="LEFT")
-        pdf.cell(0, 10, text="   BILLET(S) POUR LES JEUX OLYMPIQUES PARIS 20204 ", ln=True, align="CENTER")
-        pdf.cell(0, 5, text="________________________________________________________________________________", ln=True, align="LEFT")
-
-        pdf.cell(0, 10, f'Titulaire du billet: {user.last_name} {user.first_name}', ln=True, align="LEFT")
-        pdf.cell(0, 10, f'Plan: {offre}', ln=True, align="LEFT")
-        pdf.cell(0, 10, f'Date de réservation:test', ln=True, align="LEFT")
-
-    return pdf
-
-
 def payer(request):
     reservation = request.user.reservation
-    pdf_commandes=[]
+    pdf_commandes = []
     # génération de billets (combinaison des deux clés générées , qr code, nom acheteur + logo ;date de l'evement )
     # augmentation de ventes de Offre selon la quantité achetée
     for commande in reservation.commandes.all():
         offre = commande.offre  # récupration du plan dans la commande
         user = request.user
-        #offre = reservation.commandes.first().offre
+        # offre = reservation.commandes.first().offre
         date = "date-test"
         pdf_telechageable = creation_billet(user, offre, date)
         pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
@@ -188,17 +171,48 @@ def payer(request):
 
     # fusion des PDF  si plusieurs commandes dans la reservation  importation de PyPDF2
 
-
-
     response = HttpResponse(pdf_commandes, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="billetJO.pdf"'
 
     return response
 
     # le panier (réservation ) est réinitialisé
-    reservation.commandes.clear()
+    #reservation.commandes.clear()
     # Renvoie à la page de remerciement où on peut telecharger billet
     return redirect('remerciements')
+
+
+# création billets  téléchargeables + qr code
+def creation_billet(user, offre, date):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font('helvetica', size=12)
+
+    # concaténation : clé inscription et clé paiment,  unique à chaque user
+
+    for billet in range(offre.billet):
+        pdf.cell(0, 10, "_______________________________________________________________________________", ln=True,
+                 align="LEFT")
+        pdf.cell(0, 10, "   BILLET(S) POUR LES JEUX OLYMPIQUES PARIS 2024 ", ln=True, align="CENTER")
+        pdf.cell(0, 5, "_______________________________________________________________________________", ln=True,
+                 align="LEFT")
+
+        pdf.cell(0, 10, f'Titulaire du billet: {user.last_name} {user.first_name}', ln=True, align="LEFT")
+        pdf.cell(0, 10, f'Plan: {offre}', ln=True, align="LEFT")
+        pdf.cell(0, 10, f'Date de réservation:test', ln=True, align="LEFT")
+
+        reservation = user.reservation
+        commandes_user = reservation.commandes.all()
+        commandes_str = '|'.join([str(commande.offre) for commande in commandes_user])
+        cle_unique = f"clé inscription:{user.cle_inscription}|clé paiement:{reservation.cle_paiement}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
+
+        # creation du qrcode
+        qr = qrcode.make(cle_unique)
+        qr_path = "qr_code.png"
+        qr.save(qr_path)
+        pdf.image(qr_path, x=170, y=35, w=30, h=30)
+
+    return pdf
 
 
 def remerciements(request):
