@@ -1,0 +1,24 @@
+{% load static %}
+
+{% block content %}
+<div>
+    <h1>Panier</h1>
+</div>
+
+{% if commandes_impayees %}
+{% for commande in commandes_impayees %}
+    <h2>{{commande.offre.title}}</h2>
+    <h3>{{commande.offre.price}}</h3>
+    <p>quantité:{{commande.quantity}}</p>
+{% endfor %}
+<button class="btn-annuler">Annuler</button>
+
+<a href="{% url 'paiement' %}">Valider la commande </a>
+{% else %}
+    <p>Aucun élément dans le panier</p>
+{% endif %}
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'JoBooking/script.js' %}"></script>
+{% endblock %}

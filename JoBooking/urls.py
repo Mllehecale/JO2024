@@ -10,10 +10,10 @@ urlpatterns = [
     path("connexion/", views.connexion, name="connexion"),
     path("deconnexion/", views.deconnexion, name="deconnexion"),
     path("inscription_réussie/", views.inscription_reussie, name="inscription_reussie"),
-    path("reservation/", views.reservation, name="reservation"),
-    path("reservation/annulation", views.annulation, name="annulation"),
-    path("reservation/paiement/payer", views.payer, name="payer"),
-    path("reservation/paiement", views.paiement, name="paiement"),
-    path("reservation/remerciements", views.remerciements, name="remerciements"),
+    path("commande/", views.commande, name="commande"),
+    path("commande/annulation", views.annulation, name="annulation"),
+    path("commande/payer", views.payer, name="payer"),
+    path("commande/paiement", views.paiement, name="paiement"),
+    path("remerciements/", views.remerciements, name="remerciements"),
 
 ]

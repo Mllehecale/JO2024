@@ -100,86 +100,73 @@ def deconnexion(request):
 
 #  renvoie  à la page de reservation (c'est la page panier, après avoir réserver)
 @login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
-def reservation(request):
+def commande(request):
     if request.method == 'POST':
         user = request.user
         panier_data = json.loads(request.body)
         print('données envoyés par front:', panier_data)
         if 'panier' in panier_data:
-            reservation, _ = Reservation.objects.get_or_create(user=user)  # récupération du panier
-
             for offre_id, offre_data in panier_data['panier'].items():
                 offre_id = offre_data['id']
                 # offre_quantity = offre_data['quantity']
                 commande, created = Commande.objects.get_or_create(user=user,
                                                                    offre_id=offre_id)  # récupération commande
-
-                if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée
-                    reservation.commandes.add(commande)
-                else:  # l'offre est deja dans la commande donc on augmente la quantité
+                if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée                else:  # l'offre est deja dans la commande donc on augmente la quantité
                     # commande.quantity = offre_quantity
                     commande.save()
-            reservation.save()
-    try:
-        reservation = Reservation.objects.get(user=request.user)  # vérification existance réservation
-    except Reservation.DoesNotExist:
-        return render(request, 'Panier_vide.html')
+    # récupération des commandes impayées ( par defaut paimement = False car pas encore payé)
+    commandes_impayes = Commande.objects.filter(user=request.user, paiement=False)
 
-    return render(request, 'reservation.html', context={
-        'commandes': reservation.commandes.all()})  # affiche tous les éléments qu'ya dans la réservation si existe
+    if commandes_impayes:
+        return render(request, 'panier.html', context={'commandes_impayees': commandes_impayes})
+    else:
+        return render(request, 'panier_vide.html')
 
 
 # methode pour annuler une réservation au complet
 def annulation(request):
-    user_reservation = Reservation.objects.get(user=request.user)
-    if user_reservation:  # si elle existe
-        for commande in user_reservation.commandes.all():
+    commandes_impayés = Commande.objects.filter(user=request.user, paiement=False)
+    if commandes_impayés:
+        for commande in commandes_impayés:
             commande.quantity = 0
             commande.save()
-        user_reservation.commandes.all().delete()
-        user_reservation.delete()  # suppression de tout ce qu'y a dans la réservation qu'on supprime ensuite
+    commandes_impayés.delete()  # suppression commandes impayés dans le panier.s
 
     return redirect('index')  # retourne vers la page d'accueil
 
 
+def remerciements(request):
+    return render(request, 'remerciements.html')
+
+
 def payer(request):
-    reservation = request.user.reservation
+    user = request.user
+    commandes_impayes = Commande.objects.filter(user=user, paiement=False)
     pdf_commandes = []
     # génération de billets (combinaison des deux clés générées , qr code, nom acheteur + logo ;date de l'evement )
     # augmentation de ventes de Offre selon la quantité achetée
-    for commande in reservation.commandes.all():
+    for commande in commandes_impayes:
         offre = commande.offre  # récupration du plan dans la commande
-        user = request.user
-        # offre = reservation.commandes.first().offre
         date = "date-test"
         pdf_telechageable = creation_billet(user, offre, date)
         pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
         pdf_commandes.append(pdf_content)
-
         offre.ventes += commande.quantity
         offre.save()
-
-    # paiement dans Reservation devient TRUE (initialement à FALSE)
-    reservation.paiement = True
-    reservation.save()
+        commande.paiement = True  # les commandes sont payés
 
     # génération de clé unique pour paiment seulement si payer.
-    if reservation.paiement == True:
+    if commande.paiement is True:
         cle_paiement = uuid.uuid4().hex
-        reservation.cle_paiement = cle_paiement
-        reservation.save()
+        commande.cle_paiement = cle_paiement
+        commande.save()
 
-    # fusion des PDF  si plusieurs commandes dans la reservation  importation de PyPDF2
+        # fusion des PDF  si plusieurs commandes dans la reservation  importation de PyPDF2
 
-    response = HttpResponse(pdf_commandes, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="billetJO.pdf"'
-
-    return response
-
-    # le panier (réservation ) est réinitialisé
-    # reservation.commandes.clear()
-    # Renvoie à la page de remerciement où on peut telecharger billet
-    # return redirect('remerciements.html')
+        response = HttpResponse(pdf_commandes, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="billetJO.pdf"'
+        return response
+    return redirect('remerciements')
 
 
 def paiement(request):
@@ -191,12 +178,17 @@ def creation_billet(user, offre, date):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('helvetica', size=12)
+    cle_unique=""
+    cles_paiement=[]
 
     # creation qr code + concaténation : clé inscription et clé paiment,  unique à chaque user
-    reservation = user.reservation
-    commandes_user = reservation.commandes.all()
-    commandes_str = '|'.join([str(commande.offre) for commande in commandes_user])
-    cle_unique = f"clé inscription:{user.cle_inscription}|clé paiement:{reservation.cle_paiement}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
+    commandes_payes = Commande.objects.filter(user=user, paiement=True)
+    for commande in commandes_payes:
+        cles_paiement.append(commande.cle_paiement)
+    # permet affichage des cles de paiement  et plans choisi par l'user sur scan qrcode
+    if commandes_payes:
+        commandes_str = '|'.join([str(commande.offre) for commande in commandes_payes])
+        cle_unique = f"clé inscription:{user.cle_inscription}|clés paiement:{'|'.join(cles_paiement)}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
 
     # creation du qrcode
     qr = qrcode.make(cle_unique)
@@ -221,7 +213,3 @@ def creation_billet(user, offre, date):
         pdf.image(qr_path, x=170, y=y, w=30, h=30)
 
     return pdf
-
-
-def remerciements(request):
-    return render(request, 'remerciements.html')

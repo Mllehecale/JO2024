@@ -31,7 +31,7 @@ function nombreReservation(){
     const nombredeReservation=Object.keys(panier).length;
     console.log('nombre de réservations:',nombredeReservation);
     if (nombredeReservation!==null){
-            document.getElementById('nombre-reservation').innerText=`🧺Réservation(${nombredeReservation})`;
+            document.getElementById('nombre-reservation').innerText=`🧺Panier(${nombredeReservation})`;
 
     }
 }
@@ -39,6 +39,7 @@ function nombreReservation(){
 //fonction  pour s'assurer du chargement du DOM
 document.addEventListener('DOMContentLoaded',function (){
     nombreReservation();
+
 });
 
 // fonction qui ajoute au panier + sauvegarde
@@ -80,7 +81,7 @@ function getCookie(name) {
 function dataPanier(){
     const panier=getPanier();
     const csrftoken=getCookie('csrftoken');
-    const url='http://127.0.0.1:8000/reservation/';
+    const url='http://127.0.0.1:8000/commande/';
     fetch(url,{
         method:'POST',
         headers:{
@@ -116,20 +117,30 @@ boutonsReserver.forEach(bouton => {
 }
 );
 
-
-// BOUTON D ANNULATION
-const boutonAnnulation = document.querySelector('.btn-annuler');
-boutonAnnulation.addEventListener('click',function (){
-    console.log('bouton annuler opérationnel ! ')
-    deletePanier();
-    window.location.href='annulation';
-})
-
 //BOUTON PAIEMENT
-
-const boutonPaiement=document.getElementById('btn-payer')
-boutonPaiement.addEventListener('click',function (){
+const boutonpaiement=document.getElementById('btnpayer');
+function declencherpaiement (){
     console.log('bouton payer opérationnel');
-    deletePanier();
     window.location.href='payer';
-})
+    deletePanier();
+}
+boutonpaiement.addEventListener("click",declencherpaiement);
+
+
+
+
+//BOUTON ANNULATION DE LA COMMANDE
+const boutonannulation=document.getElementById('btn-annulation')
+function declencherannulation(){
+    console.log('bouton annuler opérationnel');
+    window.location.href='annulation';
+    deletePanier();
+
+}
+boutonannulation.addEventListener("click",declencherannulation)
+
+
+
+
+
+

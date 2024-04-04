@@ -84,18 +84,21 @@ class Commande(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    paiement = models.BooleanField(default=False)
+    date_commande = models.DateTimeField(blank=True, null=True)
+    cle_paiement = models.CharField(max_length=100, unique=True, blank=True, null=True)
 
     def __str__(self):
         return f'{self.offre.title}({self.quantity})'
+
+    def __str__(self):
+        return self.user.email  # rappel : l'email est une donnée unique
 
 
 class Reservation(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)  # user peut avoir qu'un seul panier (réservation)
     commandes = models.ManyToManyField(Commande)
-    paiement = models.BooleanField(default=False)
-    date_commande = models.DateTimeField(blank=True, null=True)
-    cle_paiement = models.CharField(max_length=100, unique=True, blank=True, null=True)
 
     # champs ManyToManyField non pris en charge pour champ interface admin donc voici une méthode personnalisée
     # sinon retourne ERROR  (admin.E109)
