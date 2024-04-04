@@ -1,5 +1,9 @@
 console.log('hello');  // pour vérifier si script reconnu
 
+//document.addEventListener('DOMContentLoaded',function (){
+  // console.log('Le DOM est chargé')
+//})
+
 // fonction pour récupérer panier dans localStorage
 function getPanier(){
     let panier= localStorage.getItem('panier');
@@ -21,7 +25,6 @@ function deletePanier(){
     localStorage.removeItem('panier');
 }
 
-
 // fonction pour afficher nombre éléments dans panier ( réservation )
 function nombreReservation(){
     const panier = getPanier();
@@ -33,30 +36,29 @@ function nombreReservation(){
     }
 }
 
-// fonction  pour s'assurer du chargement du DOM
+//fonction  pour s'assurer du chargement du DOM
 document.addEventListener('DOMContentLoaded',function (){
     nombreReservation();
 });
 
-
-
 // fonction qui ajoute au panier + sauvegarde
-    function addOffre(offre) {
-        let panier = getPanier();
-        console.log('panier actuel;', panier)
-        if (panier[offre.id]) {
-            console.log('déja dans panier', panier[offre.id]);
-            panier[offre.id].quantity += 1;
-        } else {
-            panier[offre.id] = {
-                id: offre.id,
-                quantity :offre.quantity
-            };
+function addOffre(offre) {
+    let panier = getPanier();
+    console.log('panier actuel;', panier)
+    if (panier[offre.id]) {
+        console.log('déja dans panier', panier[offre.id]);
+        panier[offre.id].quantity += 1;
+    } else {
+        panier[offre.id] = {
+            id: offre.id,
+            quantity: 1
+        };
 
-        }
-        savePanier(panier);
-        nombreReservation();
     }
+    savePanier(panier);
+    nombreReservation();
+}
+
 
 // acquisition token    code source :django documentation
 function getCookie(name) {
@@ -75,46 +77,44 @@ function getCookie(name) {
     return cookieValue;
 }
 
-
-//envoie données panier de l'user  vers le back
 function dataPanier(){
-        const panier=getPanier()
-        const csrftoken = getCookie('csrftoken');
-        fetch('http://127.0.0.1:8000/reservation/',{
-            method:'POST',
-            headers:{
-                'Content-type':'application/json',
-                'X-CSRFToken':csrftoken
-            },
-            body:JSON.stringify({panier: panier})
-        })
-            .then(response=>response.json())
-            .then(data=>{ console.log(data);
-            })
-            .catch(error=>{
-                console.log('Erreur durant requête',error);
-            });
+    const panier=getPanier();
+    const csrftoken=getCookie('csrftoken');
+    const url='http://127.0.0.1:8000/reservation/';
+    fetch(url,{
+        method:'POST',
+        headers:{
+            'Content-type':'application/json',
+            'X-CSRFToken':csrftoken
+        },
+        body:JSON.stringify({panier:panier})
+    })
+        .then(response=>response.json())
+        .then(data=>{console.log(data)})
+        .catch(error=>{console.log('erreur durant requête',error)});
+
 }
+
+
 
 
 // BOUTON DE RESERVATION
 // Récupérer chaque bouton de réservation
-    const boutonsReserver = document.querySelectorAll('.btn-reservation');
-//Gestionnaire d'événement sur le clique
-    boutonsReserver.forEach(bouton => {
-            bouton.addEventListener('click', function () {
-                console.log('bouton "réserver" fonctionne')
+const boutonsReserver = document.querySelectorAll('.btn-reservation');
+boutonsReserver.forEach(bouton => {
+    bouton.addEventListener('click', function () {
+        console.log('bouton "réserver" fonctionne')
 
-                const offreId = this.getAttribute('data-offre-id');
-                const offre = {id: offreId};
-                console.log(offre);
-                addOffre(offre);
+        const offreId = this.getAttribute('data-offre-id');
+        const offre = {id: offreId};
+        console.log(offre);
+        addOffre(offre);
 
-                dataPanier();
-            });
+        dataPanier();
+    });
 
-        }
-        );
+}
+);
 
 
 // BOUTON D ANNULATION
@@ -126,9 +126,10 @@ boutonAnnulation.addEventListener('click',function (){
 })
 
 //BOUTON PAIEMENT
-const boutonPaiement = document.querySelector('.btn-valider');
+
+const boutonPaiement=document.getElementById('btn-payer')
 boutonPaiement.addEventListener('click',function (){
-    console.log('bouton valider opérationnel ! ')
+    console.log('bouton payer opérationnel');
     deletePanier();
     window.location.href='payer';
 })

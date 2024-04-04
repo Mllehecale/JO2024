@@ -177,9 +177,13 @@ def payer(request):
     return response
 
     # le panier (réservation ) est réinitialisé
-    #reservation.commandes.clear()
+    # reservation.commandes.clear()
     # Renvoie à la page de remerciement où on peut telecharger billet
-    return redirect('remerciements')
+    # return redirect('remerciements.html')
+
+
+def paiement(request):
+    return render(request, 'paiement.html')
 
 
 # création billets  téléchargeables + qr code
@@ -188,7 +192,20 @@ def creation_billet(user, offre, date):
     pdf.add_page()
     pdf.set_font('helvetica', size=12)
 
-    # concaténation : clé inscription et clé paiment,  unique à chaque user
+    # creation qr code + concaténation : clé inscription et clé paiment,  unique à chaque user
+    reservation = user.reservation
+    commandes_user = reservation.commandes.all()
+    commandes_str = '|'.join([str(commande.offre) for commande in commandes_user])
+    cle_unique = f"clé inscription:{user.cle_inscription}|clé paiement:{reservation.cle_paiement}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
+
+    # creation du qrcode
+    qr = qrcode.make(cle_unique)
+    qr_path = "qr_code.png"
+    qr.save(qr_path)
+    # dynamisation position y pour qr code but: eviter qu'ils se superposent si plusieurs billets
+    espace_y = 55
+    position_y = 35
+    # ajout logo sur billet
 
     for billet in range(offre.billet):
         pdf.cell(0, 10, "_______________________________________________________________________________", ln=True,
@@ -196,21 +213,12 @@ def creation_billet(user, offre, date):
         pdf.cell(0, 10, "   BILLET(S) POUR LES JEUX OLYMPIQUES PARIS 2024 ", ln=True, align="CENTER")
         pdf.cell(0, 5, "_______________________________________________________________________________", ln=True,
                  align="LEFT")
-
         pdf.cell(0, 10, f'Titulaire du billet: {user.last_name} {user.first_name}', ln=True, align="LEFT")
         pdf.cell(0, 10, f'Plan: {offre}', ln=True, align="LEFT")
         pdf.cell(0, 10, f'Date de réservation:test', ln=True, align="LEFT")
 
-        reservation = user.reservation
-        commandes_user = reservation.commandes.all()
-        commandes_str = '|'.join([str(commande.offre) for commande in commandes_user])
-        cle_unique = f"clé inscription:{user.cle_inscription}|clé paiement:{reservation.cle_paiement}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
-
-        # creation du qrcode
-        qr = qrcode.make(cle_unique)
-        qr_path = "qr_code.png"
-        qr.save(qr_path)
-        pdf.image(qr_path, x=170, y=35, w=30, h=30)
+        y = position_y + billet * espace_y  # calcul pour dynamiser la position de y
+        pdf.image(qr_path, x=170, y=y, w=30, h=30)
 
     return pdf
 

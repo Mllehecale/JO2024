@@ -1,6 +1,5 @@
 {% load static %}
 
-
 {% block content %}
 <div>
     <h1>Réservation</h1>
@@ -14,9 +13,8 @@
 
 {% endfor %}
 <button class="btn-annuler">Annuler</button>
-<button class="btn-valider">Valider la commande</button>
 
-<a href="{% url 'payer' %}">Valider la commande </a>
+<a href="{% url 'paiement' %}">Valider la commande </a>
 {% else %}
     <p>Aucun élément dans le panier</p>
 {% endif %}
