@@ -1,25 +1,15 @@
-{% load static %}
 
 {% block content %}
 <div>
-    <h1>Réservation</h1>
+    <h1>Mes Réservations </h1>
 </div>
 
-{% if commandes %}
-{% for commande in commandes %}
-<h2>{{commande.offre.title}}</h2>
-<h3>{{commande.offre.price}}</h3>
-<p>quantité:{{commande.quantity}}</p>
-
-{% endfor %}
-<button class="btn-annuler">Annuler</button>
-
-<a href="{% url 'paiement' %}">Valider la commande </a>
+{% if commandes_payees %}
+    {% for commande in commandes_payees %}
+        <h2>{{commande.offre.title}}</h2>
+    {% endfor %}
 {% else %}
-    <p>Aucun élément dans le panier</p>
+    <p>Vous n'avez réservé aucune offre pour le moment.</p>
 {% endif %}
 {% endblock content %}
 
-{% block js %}
-<script src="{% static 'JoBooking/script.js' %}"></script>
-{% endblock %}

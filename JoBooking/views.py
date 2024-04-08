@@ -1,8 +1,16 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import Connexion
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, Offre, Reservation, Commande
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_str, force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .token import activation_compte
+from django.core.mail import EmailMessage
+from django.contrib import messages
 from .authbackends import EmailAuthBackend
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -45,17 +53,69 @@ def inscription(request):
     if request.method == 'POST':  # vérification methode de la requête est POST = formulaire soumis
         form = CustomSignupForm(request.POST)  # création formulaire avec données POST
         if form.is_valid():  # vérification  de la validité des données
-            user = form.save()  # sauvegarde dans la BDD
+            user = form.save()  # sauvegarde dans la BDD mais enregistrement pas immediat
             user.cle_inscription = uuid.uuid4().hex  # generation clé d'inscription
             user.save()
+            #connexion automatique
 
-            return redirect('inscription_reussie')  # redirection de l'utilisateur vers une autre page
+            if user is not None:  # signification : si l'user a été trouvée ...
+                login(request, user, backend='JoBooking.authbackends.EmailAuthBackend')
+
+                return redirect('verification_email')  # redirection de l'utilisateur vers page verification mail
+
         else:
             context['errors'] = form.errors  # erreur de validation
 
     form = CustomSignupForm()  # nouvelle page d'inscription vide  donc sans POST
     context['form'] = form
     return render(request, 'JoBooking/inscription.html', context=context)  # renvoie page d'inscription
+
+
+# view vérification email
+def verification_email(request):
+    if request.method == "POST":
+        if isinstance(request.user, CustomUser) and request.user.checked_email != True:
+            user = request.user
+            current_site = get_current_site(request)
+            email = request.user.email
+            subjet = "Vérification de votre email"
+            message = render_to_string('message_verification_email.html', {
+                'domain': current_site.domain,
+                'request': request,
+                'user': user,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': activation_compte.make_token(user),
+
+            })
+            email = EmailMessage(
+                subjet, message, to=[email]
+            )
+            email.content_subtype = 'html'
+            email.send()
+            return redirect('email_verifie')
+        else:
+            messages.warning(request, 'impossible envoi mail de verification')
+    return render(request, 'verification_email.html')
+
+
+def email_verifie(request):
+    return render(request, 'email_verifie.html')
+
+
+def confirmation_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = CustomUser.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+        user = None
+    if user is not None and activation_compte.check_token(user, token):
+        user.checked_email = True
+        user.save()
+        messages.success(request, 'Votre email a bien été vérifié.')
+        return redirect('inscription_reussie')
+    else:
+        messages.warning(request, 'Le lien est invalide.')
+    return render(request, 'verification_email.html')
 
 
 # view pour l'inscripion réussie d'un user
@@ -115,22 +175,22 @@ def commande(request):
                     # commande.quantity = offre_quantity
                     commande.save()
     # récupération des commandes impayées ( par defaut paimement = False car pas encore payé)
-    commandes_impayes = Commande.objects.filter(user=request.user, paiement=False)
+    commandes_impayees = Commande.objects.filter(user=request.user, paiement=False)
 
-    if commandes_impayes:
-        return render(request, 'panier.html', context={'commandes_impayees': commandes_impayes})
+    if commandes_impayees:
+        return render(request, 'panier.html', context={'commandes_impayees': commandes_impayees})
     else:
         return render(request, 'panier_vide.html')
 
 
 # methode pour annuler une réservation au complet
 def annulation(request):
-    commandes_impayés = Commande.objects.filter(user=request.user, paiement=False)
-    if commandes_impayés:
-        for commande in commandes_impayés:
+    commandes_impayees = Commande.objects.filter(user=request.user, paiement=False)
+    if commandes_impayees:
+        for commande in commandes_impayees:
             commande.quantity = 0
             commande.save()
-    commandes_impayés.delete()  # suppression commandes impayés dans le panier.s
+    commandes_impayees.delete()  # suppression commandes impayés dans le panier.s
 
     return redirect('index')  # retourne vers la page d'accueil
 
@@ -141,11 +201,11 @@ def remerciements(request):
 
 def payer(request):
     user = request.user
-    commandes_impayes = Commande.objects.filter(user=user, paiement=False)
+    commandes_impayees = Commande.objects.filter(user=user, paiement=False)
     pdf_commandes = []
     # génération de billets (combinaison des deux clés générées , qr code, nom acheteur + logo ;date de l'evement )
     # augmentation de ventes de Offre selon la quantité achetée
-    for commande in commandes_impayes:
+    for commande in commandes_impayees:
         offre = commande.offre  # récupration du plan dans la commande
         date = "date-test"
         pdf_telechageable = creation_billet(user, offre, date)
@@ -178,16 +238,16 @@ def creation_billet(user, offre, date):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('helvetica', size=12)
-    cle_unique=""
-    cles_paiement=[]
+    cle_unique = ""
+    cles_paiement = []  # un user peut avoir plusieurs commandes donc plusieurs clés de paiements
 
     # creation qr code + concaténation : clé inscription et clé paiment,  unique à chaque user
-    commandes_payes = Commande.objects.filter(user=user, paiement=True)
-    for commande in commandes_payes:
+    commandes_payees = Commande.objects.filter(user=user, paiement=True)
+    for commande in commandes_payees:
         cles_paiement.append(commande.cle_paiement)
     # permet affichage des cles de paiement  et plans choisi par l'user sur scan qrcode
-    if commandes_payes:
-        commandes_str = '|'.join([str(commande.offre) for commande in commandes_payes])
+    if commandes_payees:
+        commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
         cle_unique = f"clé inscription:{user.cle_inscription}|clés paiement:{'|'.join(cles_paiement)}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
 
     # creation du qrcode
@@ -213,3 +273,15 @@ def creation_billet(user, offre, date):
         pdf.image(qr_path, x=170, y=y, w=30, h=30)
 
     return pdf
+
+
+def reservation(request):
+    reservation_user, created = Reservation.objects.get_or_create(user=request.user)
+    commandes_payees = Commande.objects.filter(user=request.user, paiement=True)
+
+    if created:
+        for commande in commandes_payees:
+            reservation_user.commandes.add(commande)
+        reservation_user.save()
+
+    return render(request, 'reservation.html', context={'commandes_payees': commandes_payees})

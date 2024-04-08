@@ -126,3 +126,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'JoBooking.authbackends.EmailAuthBackend',
 ]
+
+EMAIL_BACKEND =
+EMAIL_HOST =
+EMAIL_HOST_USER =
+EMAIL_HOST_PASSWORD =
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL =

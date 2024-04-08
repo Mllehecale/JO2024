@@ -1,0 +1,13 @@
+<h1>Pour poursuivre votre inscription,vous devez confirmer votre adresse email.</h1>
+<form method="POST">
+     {% csrf_token %}
+    <input class="btn btn-primary max btn" type="submit" value="Envoyer mail de confirmation">
+</form>
+
+<div>
+    {% if messages %}
+        {% for message in messages %}
+    <div class="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
