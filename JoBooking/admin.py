@@ -24,7 +24,7 @@ class UserCreationForm(forms.ModelForm):
 # l'ajout de ModelADmin permet la personnalisation de l'affichage sur l'interface
 class AdminInterface(BaseUserAdmin):
     login_form = UserCreationForm
-    list_display = ('email', 'first_name', 'last_name', 'is_staff','checked_email','cle_inscription',)
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'checked_email', 'cle_inscription',)
 
 
 class AdminOffre(admin.ModelAdmin):
@@ -32,7 +32,7 @@ class AdminOffre(admin.ModelAdmin):
 
 
 class AdminCommande(admin.ModelAdmin):
-    list_display = ('user', 'offre', 'quantity', 'paiement', 'cle_paiement', 'date_commande')
+    list_display = ('user', 'offre_id',  'quantity', 'paiement', 'cle_paiement', 'date_commande')
 
 
 class AdminReservation(admin.ModelAdmin):

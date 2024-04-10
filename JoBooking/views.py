@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import Connexion
@@ -17,7 +16,8 @@ from django.shortcuts import get_object_or_404
 import uuid
 import json
 from fpdf import FPDF
-import PyPDF2
+from PyPDF2 import PdfMerger, PdfReader
+from io import BytesIO
 from django.http import HttpResponse
 import qrcode
 
@@ -42,7 +42,12 @@ def index(request):
 # view pour la page des offres
 def offres(request):
     list_offres = Offre.objects.all()  # affiche toutes les offres  = plan solo,duo,family ou autre
-    context = {'offres': list_offres}
+    commandes_user = {}  # creation dictionnaire pour offre deja acheté
+    if request.user.is_authenticated:
+        commandes_utilisateur = Commande.objects.filter(user=request.user)
+        for commande in commandes_utilisateur:
+            commandes_user[commande.offre_id] = True  # recupération de l'id
+    context = {'offres': list_offres, 'commandes_user': commandes_user}
     return render(request, 'JoBooking/offres.html', context)
 
 
@@ -56,8 +61,7 @@ def inscription(request):
             user = form.save()  # sauvegarde dans la BDD mais enregistrement pas immediat
             user.cle_inscription = uuid.uuid4().hex  # generation clé d'inscription
             user.save()
-            #connexion automatique
-
+            # connexion automatique
             if user is not None:  # signification : si l'user a été trouvée ...
                 login(request, user, backend='JoBooking.authbackends.EmailAuthBackend')
 
@@ -203,30 +207,31 @@ def payer(request):
     user = request.user
     commandes_impayees = Commande.objects.filter(user=user, paiement=False)
     pdf_commandes = []
-    # génération de billets (combinaison des deux clés générées , qr code, nom acheteur + logo ;date de l'evement )
-    # augmentation de ventes de Offre selon la quantité achetée
+    filename = "BilletsJo.pdf"
+
     for commande in commandes_impayees:
         offre = commande.offre  # récupration du plan dans la commande
         date = "date-test"
-        pdf_telechageable = creation_billet(user, offre, date)
-        pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
-        pdf_commandes.append(pdf_content)
-        offre.ventes += commande.quantity
-        offre.save()
         commande.paiement = True  # les commandes sont payés
-
-    # génération de clé unique pour paiment seulement si payer.
-    if commande.paiement is True:
-        cle_paiement = uuid.uuid4().hex
-        commande.cle_paiement = cle_paiement
         commande.save()
+        if commande.paiement is True:
+            cle_paiement = uuid.uuid4().hex
+            commande.cle_paiement = cle_paiement
+            commande.save()
 
-        # fusion des PDF  si plusieurs commandes dans la reservation  importation de PyPDF2
+            pdf_telechageable = creation_billet(user, offre, date)
+            pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
+            pdf_commandes.append(pdf_content)
 
-        response = HttpResponse(pdf_commandes, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="billetJO.pdf"'
-        return response
-    return redirect('remerciements')
+            offre.ventes += commande.quantity
+            offre.save()
+
+    nb_pdf = len(pdf_commandes)
+    print("nombre pdf généré:", nb_pdf)
+    response = fusion_pdf(pdf_commandes,filename)
+    if response is None:
+        response=HttpResponse(status=204)
+    return response
 
 
 def paiement(request):
@@ -235,44 +240,66 @@ def paiement(request):
 
 # création billets  téléchargeables + qr code
 def creation_billet(user, offre, date):
+    pdfs = []
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('helvetica', size=12)
     cle_unique = ""
     cles_paiement = []  # un user peut avoir plusieurs commandes donc plusieurs clés de paiements
+    print("user:", user)
+    print("offre:", offre)
+    print("date:", date)
 
     # creation qr code + concaténation : clé inscription et clé paiment,  unique à chaque user
     commandes_payees = Commande.objects.filter(user=user, paiement=True)
+    print("commandes payées:", commandes_payees)
     for commande in commandes_payees:
         cles_paiement.append(commande.cle_paiement)
     # permet affichage des cles de paiement  et plans choisi par l'user sur scan qrcode
     if commandes_payees:
         commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
         cle_unique = f"clé inscription:{user.cle_inscription}|clés paiement:{'|'.join(cles_paiement)}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
+        # creation du qrcode
+        qr = qrcode.make(cle_unique)
+        qr_path = "qr_code.png"
+        qr.save(qr_path)
+        # dynamisation position y pour qr code but: eviter qu'ils se superposent si plusieurs billets
+        espace_y = 55
+        position_y = 35
+        # ajout logo sur billet
 
-    # creation du qrcode
-    qr = qrcode.make(cle_unique)
-    qr_path = "qr_code.png"
-    qr.save(qr_path)
-    # dynamisation position y pour qr code but: eviter qu'ils se superposent si plusieurs billets
-    espace_y = 55
-    position_y = 35
-    # ajout logo sur billet
+        for billet in range(offre.billet):
+            pdf.cell(0, 10, "_______________________________________________________________________________", ln=True,
+                     align="LEFT")
+            pdf.cell(0, 10, "   BILLET(S) POUR LES JEUX OLYMPIQUES PARIS 2024 ", ln=True, align="CENTER")
+            pdf.cell(0, 5, "_______________________________________________________________________________", ln=True,
+                     align="LEFT")
+            pdf.cell(0, 10, f'Titulaire du billet: {user.last_name} {user.first_name}', ln=True, align="LEFT")
+            pdf.cell(0, 10, f'Plan: {offre}', ln=True, align="LEFT")
+            pdf.cell(0, 10, f'Date de réservation:test', ln=True, align="LEFT")
 
-    for billet in range(offre.billet):
-        pdf.cell(0, 10, "_______________________________________________________________________________", ln=True,
-                 align="LEFT")
-        pdf.cell(0, 10, "   BILLET(S) POUR LES JEUX OLYMPIQUES PARIS 2024 ", ln=True, align="CENTER")
-        pdf.cell(0, 5, "_______________________________________________________________________________", ln=True,
-                 align="LEFT")
-        pdf.cell(0, 10, f'Titulaire du billet: {user.last_name} {user.first_name}', ln=True, align="LEFT")
-        pdf.cell(0, 10, f'Plan: {offre}', ln=True, align="LEFT")
-        pdf.cell(0, 10, f'Date de réservation:test', ln=True, align="LEFT")
+            y = position_y + billet * espace_y  # calcul pour dynamiser la position de y
+            pdf.image(qr_path, x=170, y=y, w=30, h=30)
 
-        y = position_y + billet * espace_y  # calcul pour dynamiser la position de y
-        pdf.image(qr_path, x=170, y=y, w=30, h=30)
-
+    pdfs.append(pdf)
+    print("nombre de pdf vue creation:", len(pdfs))
     return pdf
+
+
+def fusion_pdf(pdf_contents, filename):
+    merger = PdfMerger()
+    output = BytesIO()
+
+    for pdf_content in pdf_contents:
+        reader =PdfReader(BytesIO(pdf_content))
+        merger.append(reader)
+
+    merger.write(output)
+    merger.close()
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    response.write(output.getvalue())
+    return response
 
 
 def reservation(request):

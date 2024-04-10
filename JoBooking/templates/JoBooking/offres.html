@@ -12,7 +12,11 @@
     <li>{{offre.price}}</li>
 </ul>
 {% if user.is_authenticated %}
+    {% if offre.id in commandes_user %}
+        <p>Vous avez déjà acheté cette offre.Veuillez consulter l'onglet "Mes réservations"</p>
+    {% else %}
     <button class="btn-reservation" data-offre-id="{{ offre.id }}">Réserver</button>
+    {% endif %}
 {%else%}
 <a href="{% url 'connexion' %}"></a>
 {% endif %}
