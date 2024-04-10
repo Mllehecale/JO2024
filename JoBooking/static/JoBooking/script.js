@@ -117,16 +117,32 @@ boutonsReserver.forEach(bouton => {
 }
 );
 
+
+//  RETOURNER PAGE REMERCIEMENTS
+function remerciementsPage(response){
+    if(response===200){
+        window.location.href='remerciements';
+
+    }else {
+        console.error('Problème de téléchargment')
+    }
+
+
+
+
 //BOUTON PAIEMENT
 const boutonpaiement=document.getElementById('btnpayer');
 function declencherpaiement (){
     console.log('bouton payer opérationnel');
     window.location.href='payer';
     deletePanier();
+    remerciementsPage();
+
 }
 boutonpaiement.addEventListener("click",declencherpaiement);
 
 
+}
 
 
 //BOUTON ANNULATION DE LA COMMANDE

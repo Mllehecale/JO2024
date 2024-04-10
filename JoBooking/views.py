@@ -162,7 +162,7 @@ def deconnexion(request):
     return redirect('index')
 
 
-#  renvoie  à la page de reservation (c'est la page panier, après avoir réserver)
+#  renvoie  à la page panier
 @login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
 def commande(request):
     if request.method == 'POST':
@@ -228,10 +228,11 @@ def payer(request):
 
     nb_pdf = len(pdf_commandes)
     print("nombre pdf généré:", nb_pdf)
-    response = fusion_pdf(pdf_commandes,filename)
-    if response is None:
-        response=HttpResponse(status=204)
-    return response
+    response = fusion_pdf(pdf_commandes, filename)  # redirige user vers page de remerciements si pdf
+    if response.status_code == 200:
+        return render(request, 'remerciements.html', {'pdf_telechargeable': filename})
+    else:
+        return HttpResponse("Une erreur s'est produite lors du téléchargement du PDF.", status=response.status_code)
 
 
 def paiement(request):
@@ -291,7 +292,7 @@ def fusion_pdf(pdf_contents, filename):
     output = BytesIO()
 
     for pdf_content in pdf_contents:
-        reader =PdfReader(BytesIO(pdf_content))
+        reader = PdfReader(BytesIO(pdf_content))
         merger.append(reader)
 
     merger.write(output)
@@ -307,8 +308,12 @@ def reservation(request):
     commandes_payees = Commande.objects.filter(user=request.user, paiement=True)
 
     if created:
+        reservation_user.commandes.set(commandes_payees)
+        reservation_user.save()
+    else:
         for commande in commandes_payees:
-            reservation_user.commandes.add(commande)
+            if commande not in reservation_user.commandes.all():
+                reservation_user.commandes.add(commande)
         reservation_user.save()
 
     return render(request, 'reservation.html', context={'commandes_payees': commandes_payees})

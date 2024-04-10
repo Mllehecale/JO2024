@@ -1,30 +1,50 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block content %}
-<div>
-    <h2>OFFRES</h2>
-</div>
+
 
 {% for offre in offres %}
-<ul>
-    <li id="aa{{ offre.id }}">{{offre.title}}</li>   <!-- id = id de l'object mais comme déja utilisé ajout de "aa" pour identifiant unique -->
-    <li>{{offre.description}}</li>
-    <li>{{offre.price}}</li>
-</ul>
-{% if user.is_authenticated %}
-    {% if offre.id in commandes_user %}
-        <p>Vous avez déjà acheté cette offre.Veuillez consulter l'onglet "Mes réservations"</p>
-    {% else %}
-    <button class="btn-reservation" data-offre-id="{{ offre.id }}">Réserver</button>
+<div class="contenu-offre">
+    <ul>
+        <li class="titre-offre" id="aa{{ offre.id }}">{{offre.title}}</li>   <!-- id = id de l'object mais comme déja utilisé ajout de "aa" pour identifiant unique -->
+        <li class="prix-offre">{{offre.price}}€</li><br>
+        <li class="description-offre">{{offre.description}}</li>
+    </ul>
+        <ul class="offre-liste">
+            <li>▶️{{ offre.billet }} pass electronique</li><br>
+            <li>▶️E-Billet scanné le jour de l'evenement</li><br>
+            <li>▶️Paiement securise</li><br>
+            <li>▶️Livraison par telechargement</li><br>
+            <li>▶️Acces à toutes les jeux disponibles</li><br>
+
+        </ul>
+
+
+    {% if user.is_authenticated %}
+        {% if offre.id in commandes_user %}
+            <p>Vous avez déjà acheté cette offre.</p>
+            <p>Veuillez consulter l'onglet "Mes réservations"</p>
+        {% else %}
+            <div class="position-btn-reservation">
+                <button class="btn-reservation" data-offre-id="{{ offre.id }}">Réserver</button>
+
+            </div>
+        {% endif %}
+
+    {%else%}
+    <a href="{% url 'connexion' %}"></a>
     {% endif %}
-{%else%}
-<a href="{% url 'connexion' %}"></a>
-{% endif %}
+</div>
 
 
 {% endfor %}
+    {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/offres_style.css' %}">
+    {% endblock css %}
 
 {% endblock content %}
+
+
 
 {% block js %}
 <script src="{%static 'JoBooking/script.js' %}"></script>

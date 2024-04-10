@@ -6,8 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport">
     <title>Jeux Olympiques France</title>
+    <link rel="stylesheet" href="{% static 'JoBooking/style.css' %}">
 </head>
-<body>
+<body >
+<div class="top-controle">
 <a href="{% url 'commande' %}" id="nombre-reservation">🧺Panier</a>
 {% if user.is_authenticated %}
 <p>Bienvenue,{{user.first_name}} !</p>
@@ -15,7 +17,7 @@
 {% else %}
 <a href="{% url 'connexion' %}">Se connecter</a>
 {% endif %}
-
+</div>
 <!-- block pour contenu spécifique à la page-->
 {% block content %}
 {% endblock content %}

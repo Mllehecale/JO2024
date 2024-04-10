@@ -1,3 +1,10 @@
+{% extends 'index.html' %}
+{% block content %}
 <h1>Merci pour votre achat</h1>
-<h2>voici le pass pour accéder à l'évenement</h2>
-<p>N'oubliez pas de le présenter le jour de l'évenement</p>
+
+<p>Vous pouvez télécharger vos billets:"</p>
+    <a href="{{ pdf_telechargeable }}">Téléchargement mes billets</a>
+<p>Les billets vous sont envoyés également par mail.</p>
+<p>N'oubliez pas de présenter vos billets le jour de l'évenement</p>
+
+{% endblock content %}
