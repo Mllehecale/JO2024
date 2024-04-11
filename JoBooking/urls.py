@@ -2,7 +2,6 @@ from django.urls import path
 from django.contrib import admin
 
 from . import views
-
 urlpatterns = [
     path("", views.index, name="index"),
     path("offres/", views.offres, name="offres"),
@@ -19,5 +18,6 @@ urlpatterns = [
     path("commande/paiement", views.paiement, name="paiement"),
     path("reservation/", views.reservation, name="reservation"),
     path("remerciements/", views.remerciements, name="remerciements"),
+    path("telechargement_pdf/", views.telechargement_pdf, name="telechargement_pdf"),
 
 ]
