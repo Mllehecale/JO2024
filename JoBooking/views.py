@@ -155,7 +155,7 @@ def connexion(request):
     return render(request, 'connexion.html', context={'form': form, 'message': message})
 
 
-# méthode pour que  user se déconnecte
+# méthode pour que les users se déconnecte
 def deconnexion(request):
     logout(request)
     return redirect('index')
@@ -198,42 +198,43 @@ def annulation(request):
     return redirect('index')  # retourne vers la page d'accueil
 
 
+def remerciements(request):
+    return render(request, 'remerciements.html')
+
+
 def payer(request):
     user = request.user
     commandes_impayees = Commande.objects.filter(user=user, paiement=False)
 
     for commande in commandes_impayees:
-        offre = commande.offre  # récuperation du plan dans la commande
+        offre = commande.offre  # récupration du plan dans la commande
         commande.paiement = True  # les commandes sont payés
         commande.save()
         if commande.paiement is True:
-            cle_paiement = uuid.uuid4().hex  # clé de paiement = garantit que l'user a payé
+            cle_paiement = uuid.uuid4().hex
             commande.cle_paiement = cle_paiement
             commande.save()
-            offre.ventes += commande.quantity  # mise a jour du nombre de ventes en fonction quantité
+
+            offre.ventes += commande.quantity
             offre.save()
-    return redirect('remerciements')
+
+    return render(request, 'remerciements.html')
 
 
 def telechargement_pdf(request):
     user = request.user
-    commandes_payees = Commande.objects.filter(user=user, paiement=True)
     pdf_commandes = []
     filename = "BilletsJo.pdf"
+    commandes_payees = Commande.objects.filter(user=user, paiement=True)
 
     for commande in commandes_payees:
-        offre = commande.offre  # récuperation du plan dans la commande
+        offre = commande.offre  # récupration du plan dans la commande
         date = "date-test"
         pdf_telechageable = creation_billet(user, offre, date)
         pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
         pdf_commandes.append(pdf_content)
-
-    pdf_fusion = fusion_pdf(pdf_commandes, filename)
+    pdf_fusion = fusion_pdf(pdf_commandes, filename)  # redirige user vers page de remerciements si pdf
     return pdf_fusion
-
-
-def remerciements(request):
-    return render(request, 'remerciements.html')
 
 
 def paiement(request):

@@ -1,8 +1,8 @@
 console.log('hello');  // pour vérifier si script reconnu
 
-document.addEventListener('DOMContentLoaded',function (){
-   console.log('Le DOM est chargé')
-})
+//document.addEventListener('DOMContentLoaded',function (){
+  // console.log('Le DOM est chargé')
+//})
 
 // fonction pour récupérer panier dans localStorage
 function getPanier(){
@@ -118,32 +118,32 @@ boutonsReserver.forEach(bouton => {
 );
 
 
-//BOUTON ANNULATION DE LA COMMANDE
-//const boutonannulation=document.getElementById('btn-annulation')
-function declencherannulation(){
-    console.log("bouton annulation ok! ");
-    window.location.href='annulation';
-    deletePanier();
-
-}
-
-
-document.addEventListener('DOMContentLoaded',function (){
-    const boutonannulation=document.getElementById('btn-annulation')
-    if (boutonannulation){
-        boutonannulation.addEventListener("click",declencherannulation)
-    }else{
-        console.log("bouton annulation non trouvé dans Dom")
-    }
-
-})
 
 
 //BOUTON PAIEMENT
 const boutonpaiement=document.getElementById('btnpayer');
 function declencherpaiement (){
-    console.log(boutonpaiement);
+    console.log('bouton payer opérationnel');
     window.location.href='payer';
     deletePanier();
+
 }
 boutonpaiement.addEventListener("click",declencherpaiement);
+
+
+
+//BOUTON ANNULATION DE LA COMMANDE
+const boutonannulation=document.getElementById('btn-annulation')
+function declencherannulation(){
+    console.log('bouton annuler opérationnel');
+    window.location.href='annulation';
+    deletePanier();
+
+}
+boutonannulation.addEventListener("click",declencherannulation)
+
+
+
+
+
+
