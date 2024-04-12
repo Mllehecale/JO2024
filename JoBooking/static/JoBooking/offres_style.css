@@ -6,14 +6,11 @@
     overflow: hidden;
 }
 
-
-
 ul{
     list-style-type: none;
     margin: 20px;
     padding: 10px;
 }
-
 
 /* Titre des offres*/
 
@@ -22,7 +19,6 @@ ul{
     color: black;
     font-family: "Inter Semi Bold", sans-serif ;
     list-style-type: none;
-
 }
 
 /* prix des offres*/
@@ -43,6 +39,19 @@ ul{
     list-style-type: none;
 
 }
+/* promo des offres*/
+
+.promo-text{
+    color: #30D12C;
+    margin: 25px;
+    font-weight: bold;
+
+}
+
+
+.avertissement{
+    color: #D6C278;
+}
 
 /* bouton réserver*/
 .btn-reservation{
@@ -56,13 +65,12 @@ ul{
 
 .offre-liste {
     list-style-type: none;
-
 }
 
 .position-btn-reservation{
 
     margin: 100px;
-    padding: 0px;
+    padding:0;
 
 }
 

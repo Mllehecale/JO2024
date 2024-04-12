@@ -1,7 +1,8 @@
 {% extends 'index.html' %}
 {% load static %}
-{% block content %}
 
+
+{% block content %}
 
 {% for offre in offres %}
 <div class="contenu-offre">
@@ -10,24 +11,29 @@
         <li class="prix-offre">{{offre.price}}€</li><br>
         <li class="description-offre">{{offre.description}}</li>
     </ul>
+
+        {% if offre.title == "Plan Duo" %}
+            <p class="promo-text ">✅Économisez 5€ par rapport au tarif individuel </p>
+        {% elif offre.title == "Plan Family"  %}
+            <p class="promo-text ">✅Économisez 10€ par rapport au tarif individuel </p>
+        {% endif %}
+
         <ul class="offre-liste">
             <li>▶️{{ offre.billet }} pass electronique</li><br>
             <li>▶️E-Billet scanné le jour de l'evenement</li><br>
             <li>▶️Paiement securise</li><br>
             <li>▶️Livraison par telechargement</li><br>
-            <li>▶️Acces à toutes les jeux disponibles</li><br>
-
+            <li>▶️Acces à tous les jeux disponibles</li><br>
         </ul>
 
 
     {% if user.is_authenticated %}
         {% if offre.id in commandes_user %}
-            <p>Vous avez déjà acheté cette offre.</p>
-            <p>Veuillez consulter l'onglet "Mes réservations"</p>
+            <p class="avertissement">Vous avez déjà selectionné cette offre.</p>
+            <p class="avertissement">Veuillez consulter l'onglet "Mes réservations"</p>
         {% else %}
             <div class="position-btn-reservation">
                 <button class="btn-reservation" data-offre-id="{{ offre.id }}">Réserver</button>
-
             </div>
         {% endif %}
 
@@ -36,14 +42,12 @@
     {% endif %}
 </div>
 
-
 {% endfor %}
     {% block css %}
         <link rel="stylesheet" href="{% static 'JoBooking/offres_style.css' %}">
     {% endblock css %}
 
 {% endblock content %}
-
 
 
 {% block js %}

@@ -1,25 +1,42 @@
+{% load static %}
+
+
+
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport">
     <title>Créer un compte</title>
+    <link rel="stylesheet" href="{% static 'JoBooking/authentification_style.css' %}">
 </head>
 <body>
+{% if user.is_authenticated %}
+<p>Vous êtes déja inscrit ! </p>
+{% else %}
+    <div class="cadre-formulaire">
+    <h2>Inscription</h2>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-
+    {% if form.errors %}
     {% for message in errors.values %}
         <h3 style="color: red">
             {{message}}
         </h3>
         {% endfor %}
-
+        {% endif %}
+    <input type="checkbox" id="confidentialite" name="confidentialite" required>
+    <label for="confidentialite">J'ai pris conscience de la politique commerciale de confidentialité de JOFrance 2024</label>
 
     <input type="submit" value="S'inscrire">
 </form>
-<p>Déjà membre ?<a href="{% url 'connexion' %}"> Connectez vous !</a> </p>
+    <p class="membre">Déjà membre ?<a href="{% url 'connexion' %}"> Connectez vous !</a> </p>
 
+    </div>
+
+    <img class="img-background" src="{% static 'JoBooking/images/image_inscription.jpg' %}" alt="saut en longueur par athèle">
+    <img class ="logo" src="{% static 'JoBooking/images/logo paris.png' %}" alt="logo JO">
+{% endif %}
 </body>
 </html>

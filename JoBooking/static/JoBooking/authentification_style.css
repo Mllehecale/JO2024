@@ -1,0 +1,67 @@
+.logo{
+    position: absolute;
+    top: 10px;
+    right:5px;
+    width: 60px;
+    height:60px;
+}
+
+label{
+    color: lightsteelblue;
+}
+
+/* cadre formulaire*/
+.cadre-formulaire{
+    box-sizing: border-box;
+    border: 1px solid #D6C278;
+    border-radius: 26px;
+    padding: 20px;
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    top: 20px;
+    right: 70px;
+}
+.cadre-formulaire h2{
+    text-align: center;
+    font-family:"Inter Semi Bold", sans-serif;
+    margin-top: -10px;
+}
+
+/* image page*/
+.img-background{
+    position: absolute;
+    width: 600px;
+    height: 633px;
+    top: 0;
+    left: 0;
+
+}
+
+/* connexion membre*/
+.cadre-formulaire .membre  {
+    position: absolute;
+    bottom: 0;
+    right: 150px;
+    color:  #333333;
+    text-decoration: none;
+}
+a{
+    text-decoration: none;
+    color:  #333333;
+    font-weight: bold;
+}
+
+/* champ du formulaire */
+form input[type=text],
+form input[type=email],
+form input[type=password]{
+    border-radius: 10px;
+    width: 450px;
+    height: 35px;
+    border:2px solid #EAEAEA;
+    margin-bottom:5px;
+    color: #B0A9A9;
+
+
+}

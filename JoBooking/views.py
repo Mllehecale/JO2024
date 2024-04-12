@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import Connexion
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, Offre, Reservation, Commande
 from django.contrib.sites.shortcuts import get_current_site
@@ -19,18 +20,32 @@ from PyPDF2 import PdfMerger, PdfReader
 from io import BytesIO
 from django.http import HttpResponse
 import qrcode
+from django.forms import TextInput, EmailInput
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
 class CustomSignupForm(UserCreationForm):
     class Meta:
         model = CustomUser  # ici on spécifie qu'on veut ce modèle personnalisé
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
 
-    # a coder soulever erreur si mail non valide(sans@)  ou vide
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['first_name'].label = ''
+        self.fields['last_name'].label = ''
+        self.fields['email'].label = ''
+
         self.fields['email'].required = True
+        self.fields['email'].widget.attrs['placeholder'] = 'adresse@mail.com'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Nom'
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Prénom'
+        self.fields['password1'].label = ''
+        self.fields['password2'].label = ''
+        self.fields['password1'].widget.attrs['placeholder'] = 'Mot de passe'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Confirmation Mot de passe'
+
+
+
 
 
 # view pour la page d'accueil
