@@ -1,3 +1,12 @@
-<h3>Veuillez verifier votre boite de reception.
+{% load static %}
+    <img class="img-background3" src="{% static 'JoBooking/images/enveloppe.png' %}" alt="enveloppe">
+
+<div class="cadre-verification">
+<h1>Veuillez verifier votre boite de reception.
     Nous vous avons envoye un email avec les instructions pour verifier votre adresse email.
-    </h3>
+    </h1>
+</div>
+
+{% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/authentification_style.css' %}">
+    {% endblock css %}

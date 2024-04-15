@@ -1,7 +1,10 @@
+{% load static %}
+
+<div class="cadre-verification">
 <h1>Pour poursuivre votre inscription,vous devez confirmer votre adresse email.</h1>
 <form method="POST">
      {% csrf_token %}
-    <input class="btn btn-primary max btn" type="submit" value="Envoyer mail de confirmation">
+    <input class="btn btn-primary max btn"  id="btn-verification" type="submit" value="Envoyer mail de confirmation">
 </form>
 
 <div>
@@ -11,3 +14,9 @@
         {% endfor %}
     {% endif %}
 </div>
+</div>
+
+
+   {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/authentification_style.css' %}">
+    {% endblock css %}

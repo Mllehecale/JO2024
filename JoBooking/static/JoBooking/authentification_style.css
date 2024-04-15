@@ -1,4 +1,4 @@
-/* image page*/
+/* images page*/
 .img-background{
     position: absolute;
     width: 600px;
@@ -17,7 +17,7 @@
 }
 
 
-/* champ du formulaire */
+/* champ du formulaire général*/
 form input[type=text],
 form input[type=email],
 form input[type=password]{
@@ -29,7 +29,7 @@ form input[type=password]{
     color: #B0A9A9;
 }
 /*Boutons*/
-#btn-auth , #btn-auth-connexion{
+#btn-auth , #btn-auth-connexion,#btn-verification{
     box-sizing: border-box;
     border:1px solid #EAEAEA;
     border-radius: 10px;
@@ -49,7 +49,7 @@ label{
     color: lightsteelblue;
 }
 
-/* cadre formulaire*/
+/* cadre formulaire inscription */
 .cadre-formulaire{
     box-sizing: border-box;
     border: 1px solid #D6C278;
@@ -126,4 +126,34 @@ a{
 /* bouton connexion */
 #btn-auth-connexion {
     top: 220px;
+}
+
+
+/* PAGE VERIFICATION EMAIL*/
+
+h1{
+    text-align: center;
+    margin-top: 50px;
+    color: #61A7B0;
+}
+
+.cadre-verification{
+    margin-top: 150px;
+    box-sizing: border-box;
+    border: 1px solid #D6C278;
+}
+
+#btn-verification{
+   left: 400px;
+}
+
+.alert{
+    color: red;
+}
+
+.img-background3{
+    position: absolute;
+    top: 40px;
+    margin-left: 600px;
+    height: 100px;
 }

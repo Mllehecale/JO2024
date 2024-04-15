@@ -109,7 +109,7 @@ def verification_email(request):
             email.send()
             return redirect('email_verifie')
         else:
-            messages.warning(request, 'impossible envoi mail de verification')
+            messages.warning(request, 'Impossible envoi mail de verification')
     return render(request, 'verification_email.html')
 
 
