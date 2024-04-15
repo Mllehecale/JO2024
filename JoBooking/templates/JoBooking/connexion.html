@@ -1,10 +1,25 @@
+{% load static %}
+
 {% block content %}
+
+    <div class="cadre-formulaire-connexion">
+    <h2>Connexion</h2>
+
 <p>{{message}}</p>
 <form  method="POST">
     {{form.as_p}}
     {% csrf_token %}
-    <input type="submit" value="Se connecter">
+    <input type="submit"  id="btn-auth-connexion"  value="Se connecter">
 
 </form>
-<p>Nouveau membre ? <a href="{% url 'inscription' %}">Inscrivez vous ! </a> </p>
+<p class="membre">Nouveau membre ? <a href="{% url 'inscription' %}">Inscrivez vous ! </a> </p>
 {% endblock content %}
+
+</div>
+
+    <img class="img-background" src="{% static 'JoBooking/images/image_inscription.jpg' %}" alt="saut en longueur par athèle">
+    <img class ="logo" src="{% static 'JoBooking/images/logo paris.png' %}" alt="logo JO">
+
+   {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/authentification_style.css' %}">
+    {% endblock css %}

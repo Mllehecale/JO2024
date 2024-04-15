@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import Connexion
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, Offre, Reservation, Commande
 from django.contrib.sites.shortcuts import get_current_site
@@ -20,7 +19,6 @@ from PyPDF2 import PdfMerger, PdfReader
 from io import BytesIO
 from django.http import HttpResponse
 import qrcode
-from django.forms import TextInput, EmailInput
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
@@ -43,9 +41,8 @@ class CustomSignupForm(UserCreationForm):
         self.fields['password2'].label = ''
         self.fields['password1'].widget.attrs['placeholder'] = 'Mot de passe'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirmation Mot de passe'
-
-
-
+        self.fields['password1'].help_text = '<br>Minimum 8 caractères - Pas de mot de passe tout en numérique'
+        self.fields['password2'].help_text = '<br>Saisir le mot de passe de nouveau'
 
 
 # view pour la page d'accueil

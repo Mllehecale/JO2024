@@ -1,3 +1,13 @@
+/* image page*/
+.img-background{
+    position: absolute;
+    width: 600px;
+    height: 633px;
+    top: 0;
+    left: 0;
+
+}
+
 .logo{
     position: absolute;
     top: 10px;
@@ -5,6 +15,35 @@
     width: 60px;
     height:60px;
 }
+
+
+/* champ du formulaire */
+form input[type=text],
+form input[type=email],
+form input[type=password]{
+    border-radius: 10px;
+    width: 450px;
+    height: 35px;
+    border:2px solid #EAEAEA;
+    margin-bottom:5px;
+    color: #B0A9A9;
+}
+/*Boutons*/
+#btn-auth , #btn-auth-connexion{
+    box-sizing: border-box;
+    border:1px solid #EAEAEA;
+    border-radius: 10px;
+    background: #D6C278;
+    position: absolute;
+    margin-left: 55px;
+    width: 430px;
+    height:60px;
+    color:white;
+    font-size: 15px;
+}
+
+
+/* POUR PAGE INSCRIPTION */
 
 label{
     color: lightsteelblue;
@@ -22,27 +61,19 @@ label{
     top: 20px;
     right: 70px;
 }
+
 .cadre-formulaire h2{
     text-align: center;
     font-family:"Inter Semi Bold", sans-serif;
     margin-top: -10px;
 }
 
-/* image page*/
-.img-background{
-    position: absolute;
-    width: 600px;
-    height: 633px;
-    top: 0;
-    left: 0;
-
-}
 
 /* connexion membre*/
 .cadre-formulaire .membre  {
     position: absolute;
     bottom: 0;
-    right: 150px;
+    right: 200px;
     color:  #333333;
     text-decoration: none;
 }
@@ -52,16 +83,47 @@ a{
     font-weight: bold;
 }
 
-/* champ du formulaire */
-form input[type=text],
-form input[type=email],
-form input[type=password]{
-    border-radius: 10px;
-    width: 450px;
-    height: 35px;
-    border:2px solid #EAEAEA;
-    margin-bottom:5px;
-    color: #B0A9A9;
 
+/* bouton s'inscrire */
 
+#btn-auth{
+    top: 460px;
+
+}
+/* POUR PAGE CONNEXION */
+.cadre-formulaire-connexion {
+    box-sizing: border-box;
+    border: 1px solid #D6C278;
+    border-radius: 26px;
+    padding:30px;
+    position: absolute;
+    width: 600px;
+    height:350px;
+    top:80px;
+    right: 70px;
+}
+
+.cadre-formulaire-connexion h2{
+    text-align: center;
+    font-family:"Inter Semi Bold", sans-serif;
+    margin-top: -10px;
+}
+
+/* connexion membre*/
+.cadre-formulaire-connexion .membre  {
+    position: absolute;
+    bottom: 0;
+    right: 200px;
+    color: #333333;
+    text-decoration: none;
+}
+a{
+    text-decoration: none;
+    color:  #333333;
+    font-weight: bold;
+}
+
+/* bouton connexion */
+#btn-auth-connexion {
+    top: 220px;
 }
