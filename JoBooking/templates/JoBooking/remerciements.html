@@ -1,10 +1,12 @@
 {% extends 'index.html' %}
 {% block content %}
-<h1>Merci pour votre achat</h1>
+<div class="message-merci" style="margin-left: 450px;margin-top: 200px">
+    <h1 style="color: #61A7B0;font-size: 40px">Nous vous remercions pour votre achat</h1>
 
 <p>Vous pouvez télécharger vos billets:</p>
-    <a href="{% url 'telechargement_pdf' %}">Téléchargement mes billets</a>
-<p>Les billets vous sont envoyés également par mail.</p>
-<p>N'oubliez pas de présenter vos billets le jour de l'évenement</p>
+    <a style="color: #D6C278" href="{% url 'telechargement_pdf' %}">Téléchargement mes billets</a>
+<p style="color: #B0A9A9">Les billets vous sont envoyés également par mail.</p>
+<p style="color: #B0A9A9">N'oubliez pas de présenter vos billets le jour de l'évenement</p>
+</div>
 
 {% endblock content %}

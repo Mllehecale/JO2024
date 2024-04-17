@@ -6,7 +6,7 @@
     overflow: hidden;
 }
 
-ul{
+.contenu-offre ul{
     list-style-type: none;
     margin: 20px;
     padding: 10px;

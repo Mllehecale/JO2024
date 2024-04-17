@@ -1,15 +1,26 @@
+{% extends 'index.html' %}
+{% load static %}
 
 {% block content %}
 <div>
     <h1>Mes Réservations </h1>
 </div>
-
+<h4>Vous pouvez retrouver ici, l'ensemble de vos réservations.Pour retrouver vos commandes en cours.</h4>
+    <a href="">Rendez-vous la page panier</a>
 {% if commandes_payees %}
     {% for commande in commandes_payees %}
+        <div class="offre-achete">
         <h2>{{commande.offre.title}}</h2>
+        <p>Date & heure de la réservation :{{ commande.date_commande }}</p>
+        <p class="commande-confirme">✅ Confirmé</p>
+        <img src="{{ qr_path }}" alt="QRCode Commande">
+        </div>
     {% endfor %}
 {% else %}
     <p>Vous n'avez réservé aucune offre pour le moment.</p>
 {% endif %}
+     {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
+    {% endblock css %}
 {% endblock content %}
 

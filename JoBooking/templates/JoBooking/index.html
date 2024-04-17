@@ -6,21 +6,103 @@
     <meta charset="UTF-8">
     <meta name="viewport">
     <title>Jeux Olympiques France</title>
-    <link rel="stylesheet" href="{% static 'JoBooking/style.css' %}">
+    <link rel="stylesheet" href="{% static 'JoBooking/general_style.css' %}">
 </head>
 <body >
-<div class="top-controle">
-<a href="{% url 'commande' %}" id="nombre-reservation">🧺Panier</a>
-{% if user.is_authenticated %}
-<p>Bienvenue,{{user.first_name}} !</p>
-<a href="{% url 'deconnexion' %}">Déconnexion</a>
-{% else %}
-<a href="{% url 'connexion' %}">Se connecter</a>
-{% endif %}
-</div>
-<!-- block pour contenu spécifique à la page-->
+<header>
+        <div class="logo" >
+            <img src="{% static 'JoBooking/images/logo paris.png' %}" alt="Logo" width="70" height="70" />
+        </div>
+        <div class="rebours">
+            <h5>Prévu dans 211 jours</h5>
+        </div>
+        <div id="sidebar" class="nav-menu">
+            <ul class="nav-menu-list">
+                <li class="menu-items">Accueil</li>
+                <li class="menu-items">Jeux</li>
+                <li class="menu-items">Offres</li>
+                <li class="menu-items"> Mes réservations</li>
+                <li class="menu-items"> Inscription</li>
+                <a href="{% url 'commande' %}" id="nombre-reservation" class="menu-items">🧺Panier</a>
+
+            </ul>
+            <div class="top-controle">
+    {% if user.is_authenticated %}
+    <p class="menu-items-bienvenue">Bienvenue,{{user.first_name}} !</p>
+    <a href="{% url 'deconnexion' %} " class="menu-items-bienvenue">Déconnexion</a>
+    {% else %}
+    <a href="{% url 'connexion' %}" class="menu-items">Se connecter</a>
+    {% endif %}
+            </div>
+        </div>
+
+</header>
 {% block content %}
+  <main>
+        <!-- Votre contenu principal ici -->
+         <div class="img1" >
+            <img src="{% static 'JoBooking/images/eiffel.jpg' %}" alt="imgparis" width="655" height="400" />
+        </div>
+        <div class="reservation-container">
+            <div class="reservation-title">
+                <h2> Réservez <br>vos billets en ligne<br>dès maintenant</h2>
+            </div>
+            <div>
+                <button class="btn-go" type="button">C'est parti ! &#10132;</button>
+            </div>
+        </div>
+        <div class="imgSports">
+            <img src="{% static 'JoBooking/images/athetisme.jpg' %}" alt="athetisme" width="220" height="180" />
+            <img src="{% static 'JoBooking/images/tennis.jpg' %}" alt="tennis" width="220" height="180" />
+            <img src="{% static 'JoBooking/images/natation.jpg' %}" alt="natation" width="208" height="180" />
+        </div>
+       <div>
+           <p class="presentation">Pour célébrer le sport,Paris 2024 a choisi des disciplines de nature spectaculaires <br>et captivantes telles que l'escalade et le surf.
+          <br> Des disciplines plus jeunes sont également mises en avant. <br>Exemple: Le skateboard et le breaking.<br>
+           Un large choix pour un large public.<br>
+           Cette nouvelle édition s'inscrira dans les mémoires tout comme les éditions précédentes.<br>
+           Pour en savoir plus , <a href=""> découvrez les différents jeux attendus.</a> </p>
+       </div>
+       <div class="titre">
+           <h1>Les jeux olympiques 2024 dans la ville lumière </h1>
+       </div>
+       <div class="description">
+           <p>
+               Les Jeux Olympiques représentent la plus grande célébration mondiale de l'excellence sportive, réunissant des athlètes de tous horizons pour compétitionner à travers une diversité de disciplines.
+               Cet événement quadriennal transcende les frontières nationales, unissant les nations par la compétition amicale et la poursuite de l'effort humain exceptionnel.
+               Les Jeux mettent en avant non seulement la performance athlétique exceptionnelle, mais également les valeurs d'amitié, de respect et d'excellence.
+               C'est une plateforme mondiale où les rêves des athlètes se réalisent, et où le monde se rassemble pour célébrer la passion du sport et l'unité internationale
+           </p>
+       </div>
+       <div class="Paris">
+           <h3>Cette année, le monde se rassemble à Paris &#127939; ! </h3>
+       </div>
+       <div class="infos">
+           <h2>Date de l'événement: </h2>
+           <h4>Le 27 juillet 2024 </h4>
+           <h2>Informations pratiques: </h2>
+           <h4>
+               Si vous souhaitez vous déplacer en transports en commun en Île-de-France,
+               vous trouverez toutes les informations pratiques
+               et utiles sur l’accessibilité directement sur le site internet d’Ile-de-France Mobilités.
+           </h4>
+
+       </div>
+       <div class="img2" >
+            <img src="{% static 'JoBooking/images/img2.jpg' %}" alt="course" width="690" height="350" />
+        </div>
+
+    </main>
+
 {% endblock content %}
+
+
+<footer>
+    <!-- Votre contenu du footer ici -->
+    <p>&copy; 2024 Mon Site Web. Tous droits réservés.Politique commerciale.Mentions Légales</p>
+</footer>
+<!-- block pour contenu spécifique à la page-->
+
 
 <!-- block pour js specifique à la page ,réutilisable-->
 {% block js %}

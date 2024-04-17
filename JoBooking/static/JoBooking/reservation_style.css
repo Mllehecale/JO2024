@@ -1,0 +1,24 @@
+/*PAGE MES RESERVATIONS*/
+h1{
+    color: #61A7B0;
+    text-align: center;
+    font-weight: bold;
+}
+
+h2{
+    color: #78CBD6;
+}
+.offre-achete{
+    margin-top: 50px;
+    margin-left: 150px;
+    box-sizing: border-box;
+    border: 2px solid #D6C278;
+    color: #606F7B;
+    width: 80%;
+
+}
+.commande-confirme{
+    margin-left:850px;
+    color: #30D12C;
+
+}

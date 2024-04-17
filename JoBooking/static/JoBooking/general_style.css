@@ -1,0 +1,171 @@
+.top-controle{
+    clear: both;
+}
+
+body {
+    margin: 0; /* Supprimer les marges par défaut du corps */
+    padding: 0; /* Supprimer le rembourrage par défaut du corps */
+
+}
+
+header {
+    display: flex;
+    align-items: center; /* Centrer verticalement les éléments dans le conteneur flex */
+    height: 70px;
+}
+/*barre de nav*/
+.nav-menu{
+    background: black;
+    height: 70px;
+    width: 694px;
+    position: absolute;
+    top: 0; /* Aligner en haut de la page */
+    right: 0; /* Aligner à droite de la page */
+    display:flex; /* Utiliser le modèle de boîte flexible pour les enfants directs */
+    align-items: center; /* Centrer verticalement les éléments dans la barre de navigation */
+    justify-content: space-between; /* Espacement égal entre les éléments à l'intérieur de la barre de navigation */
+}
+
+.menu-items{
+    list-style-type: none;
+    color: white;
+    display:inline-block;
+    padding:10px;
+    text-decoration: none;
+}
+.menu-items-bienvenue{
+    padding: 0;
+    margin: 0;
+    color: white;
+    text-decoration: none;
+    margin-top: -13px;
+
+}
+.logo{
+    display: flex;
+    justify-content: flex-start;
+    margin-right: 200px;
+}
+div.rebours{
+    flex-grow:1;
+    color: red;
+
+}
+
+div.img1{
+    opacity:80%;
+    position: relative;
+}
+
+/* Styles pour le conteneur de réservation */
+.reservation-container {
+    align-items:center;
+    position: absolute;
+    top: 140px; /* Ajustez la position verticale par rapport au parent */
+    left:20px;
+    font-style:normal;
+    font-size:25px;
+    line-height:10px;
+    /*background: rgba(0, 255, 226, 0.57);*/
+    opacity:100%;
+}
+.reservation-title h2{
+    color: white;
+    line-height: 1.2;
+    font-weight: bold;
+    background-color: rgba(210, 208, 208, 0.49);
+}
+/* Bouton conteneur de réservation*/
+.btn-go{
+    position: absolute;
+    width: 163px;
+    height: 46px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    border: none;
+    font-style: normal;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 29px;
+    text-align: center;
+    color: #0E7177;
+    cursor:pointer;
+}
+.btn-go:hover {
+    background-color:aqua;
+    color:white;
+}
+
+/* présentation des jeux*/
+
+.presentation{
+    padding-left: 10px;
+    color:black;
+    font-size:18px;
+}
+.presentation a{
+    color: #0E7177;
+}
+/* Description JO et infos */
+
+.titre{
+    color: #78CBD6;
+    position: absolute;
+    top: 70px;
+    right: 40px;
+    width: 502px;
+    height: 170px;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 50px;
+
+}
+
+.description{
+    position: absolute;
+    top: 200px;
+    right: 30px;
+    left:700px
+}
+
+.Paris {
+    position: absolute;
+    top: 350px;
+    right: 40px;
+    left:800px;
+    color:#D6C278;
+}
+.infos{
+    position: absolute;
+    top: 430px;
+    right:30px;
+    left:700px;
+}
+.infos h2{
+   color: #063f42;
+}
+
+.img2{
+    position: absolute;
+    top: 655px;
+    right:0;
+    left:656px;
+    margin-bottom: 50px;
+
+}
+
+
+/*bas de page PAGE ACCUEIL*/
+footer p{
+    position: relative;
+    top:405px;
+    width: 100%;
+    margin-right: 0;
+    background-color: rgba(210, 208, 208, 0.44); /* Couleur de fond du footer */
+    padding: 15px;
+    text-align: center;
+}
+footer{
+    position: absolute;
+    bottom: 0;
+}

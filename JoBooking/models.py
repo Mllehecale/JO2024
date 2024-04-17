@@ -86,7 +86,7 @@ class Commande(models.Model):
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     paiement = models.BooleanField(default=False)
-    date_commande = models.DateTimeField(blank=True, null=True)
+    date_commande = models.DateTimeField(auto_now=True)
     cle_paiement = models.CharField(max_length=100, unique=True, blank=True, null=True)
 
     def __str__(self):

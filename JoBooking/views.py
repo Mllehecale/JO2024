@@ -241,7 +241,7 @@ def telechargement_pdf(request):
 
     for commande in commandes_payees:
         offre = commande.offre  # récupration du plan dans la commande
-        date = "date-test"
+        date = commande.date_commande
         pdf_telechageable = creation_billet(user, offre, date)
         pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
         pdf_commandes.append(pdf_content)
@@ -261,10 +261,6 @@ def creation_billet(user, offre, date):
     pdf.set_font('helvetica', size=12)
     cle_unique = ""
     cles_paiement = []  # un user peut avoir plusieurs commandes donc plusieurs clés de paiements
-    print("user:", user)
-    print("offre:", offre)
-    print("date:", date)
-
     # creation qr code + concaténation : clé inscription et clé paiment,  unique à chaque user
     commandes_payees = Commande.objects.filter(user=user, paiement=True)
     print("commandes payées:", commandes_payees)
@@ -291,7 +287,7 @@ def creation_billet(user, offre, date):
                      align="LEFT")
             pdf.cell(0, 10, f'Titulaire du billet: {user.last_name} {user.first_name}', ln=True, align="LEFT")
             pdf.cell(0, 10, f'Plan: {offre}', ln=True, align="LEFT")
-            pdf.cell(0, 10, f'Date de réservation:test', ln=True, align="LEFT")
+            pdf.cell(0, 10, f'Date & Heure réservation:{date}', ln=True, align="LEFT")
 
             y = position_y + billet * espace_y  # calcul pour dynamiser la position de y
             pdf.image(qr_path, x=170, y=y, w=30, h=30)
@@ -321,13 +317,22 @@ def reservation(request):
     reservation_user, created = Reservation.objects.get_or_create(user=request.user)
     commandes_payees = Commande.objects.filter(user=request.user, paiement=True)
 
+
     if created:
         reservation_user.commandes.set(commandes_payees)
         reservation_user.save()
     else:
         for commande in commandes_payees:
+            cles_paiement = [commande.cle_paiement for commande in commandes_payees]
+            commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
+
+            cle_unique = f"clé inscription:{commande.user.cle_inscription}|clés paiement:{'|'.join(cles_paiement)}|titulaire:{commande.user.last_name} {commande.user.first_name}|plan(s):{commandes_str}"
+            # creation du qrcode
+            qr = qrcode.make(cle_unique)
+            qr_path = "qr_code.png"
+            qr.save(qr_path)
             if commande not in reservation_user.commandes.all():
                 reservation_user.commandes.add(commande)
         reservation_user.save()
 
-    return render(request, 'reservation.html', context={'commandes_payees': commandes_payees})
+    return render(request, 'reservation.html', context={'commandes_payees': commandes_payees,'qr_path':qr_path})
