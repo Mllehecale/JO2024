@@ -1,3 +1,63 @@
+/*PAGE PANIER*/
+
+.mon-panier{
+    position: absolute;
+    color: #61A7B0;
+    font-weight: bold;
+    top: 60px;
+}
+
+.conteneur-panier{
+    width: 672px;
+    border-top: 2px solid black;
+    margin-top: 60px;
+
+}
+.cadre-panier{
+  display: flex;
+    flex-direction: column;
+    max-width: 695px;
+    height: 500px;
+    background-color: #c8f8ff;
+    margin-left: 672px;
+    margin-top: -450px;
+}
+
+
+.details{
+    display: flex;
+    justify-content:flex-start;
+    margin-top: 30px;
+    margin-right: 700px;
+    font-size: 15px;
+    font-family: "Inter Semi Bold", sans-serif;
+
+
+
+
+}
+
+.details span{
+    margin-right:8rem;
+    margin-left:20px;
+    margin-top: 20px;
+
+}
+
+.offre-nom,.nb-billets,.offre-prix,.offre-supprimer{
+    flex-grow: 1;
+}
+
+.infos-offre span{
+    top:50px;
+    margin-right: 10rem;
+    margin-left: 10rem;
+}
+
+
+
+
+
 /*PAGE MES RESERVATIONS*/
 h1{
     color: #61A7B0;
@@ -19,6 +79,17 @@ h2{
 }
 .commande-confirme{
     margin-left:850px;
-    color: #30D12C;
+    color: #B0A9A9;
 
+}
+
+
+
+/*PAGE PANIER VIDE*/
+.zero-panier{
+    font-family: "Inter Semi Bold", sans-serif;
+    font-size:40px;
+    color: #606F7B;
+    text-align: center;
+    margin-top:150px;
 }

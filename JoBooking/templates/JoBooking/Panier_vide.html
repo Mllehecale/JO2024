@@ -1,1 +1,12 @@
-<h1>Panier vide ! </h1>
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="zero-panier">
+<p class="zero-panier-smiley"> :(</p>
+<p > Aucun élément dans le panier</p>
+    </div>
+ {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
+    {% endblock css %}
+{% endblock content %}

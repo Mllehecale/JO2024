@@ -1,22 +1,37 @@
+{% extends 'index.html' %}
 {% load static %}
 
 {% block content %}
-<div>
-    <h1>Panier</h1>
+    <h1 class="mon-panier"> Mon panier</h1>
+<div class="conteneur-panier">
+<div class="details">
+<span class="offre-nom">Offre</span>
+<span class="nb-billets">Nombre de Billets</span>
+<span class="offre_prix">Prix</span>
+<span class="offre-supprimer">Supprimer</span>
 </div>
-
+<div class="offre">
 {% if commandes_impayees %}
 {% for commande in commandes_impayees %}
     <h2>{{commande.offre.title}}</h2>
-    <h3>{{commande.offre.price}}</h3>
-    <p>quantité:{{commande.quantity}}</p>
+    <div class="infos-offre">
+    <span>{{commande.offre.billet}}</span>
+    <span>{{commande.offre.price}}</span>
+    </div>
+    </div>
 {% endfor %}
+    </div>
+  <div class="cadre-panier"></div>
+
 <button class="btn-annulation">Annuler</button>
 
 <a href="{% url 'paiement' %}">Valider la commande </a>
 {% else %}
     <p>Aucun élément dans le panier</p>
 {% endif %}
+ {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
+    {% endblock css %}
 {% endblock content %}
 
 {% block js %}

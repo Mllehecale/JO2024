@@ -1,3 +1,5 @@
+/* PAGE D'ACCEUIL*/
+
 .top-controle{
     clear: both;
 }
@@ -35,16 +37,17 @@ header {
 }
 .menu-items-bienvenue{
     padding: 0;
-    margin: 0;
     color: white;
     text-decoration: none;
-    margin-top: -13px;
+    margin: -13px 1px 1px;
 
 }
 .logo{
     display: flex;
     justify-content: flex-start;
     margin-right: 200px;
+    margin-left: 10px;
+
 }
 div.rebours{
     flex-grow:1;
@@ -57,7 +60,7 @@ div.img1{
     position: relative;
 }
 
-/* Styles pour le conteneur de réservation */
+/* partie réservation de l'acceuil*/
 .reservation-container {
     align-items:center;
     position: absolute;
@@ -96,7 +99,7 @@ div.img1{
     color:white;
 }
 
-/* présentation des jeux*/
+/* partie jeux de l'acceuil*/
 
 .presentation{
     padding-left: 10px;
@@ -151,21 +154,20 @@ div.img1{
     right:0;
     left:656px;
     margin-bottom: 50px;
+    opacity: 80%;
 
 }
 
 
 /*bas de page PAGE ACCUEIL*/
 footer p{
-    position: relative;
-    top:405px;
+    top:120px;
+}
+footer p{
+    position: absolute;
     width: 100%;
-    margin-right: 0;
-    background-color: rgba(210, 208, 208, 0.44); /* Couleur de fond du footer */
+    background-color: rgba(82, 229, 218, 0.56); /* Couleur de fond du footer */
     padding: 15px;
     text-align: center;
-}
-footer{
-    position: absolute;
-    bottom: 0;
+
 }

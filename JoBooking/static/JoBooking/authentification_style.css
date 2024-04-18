@@ -157,3 +157,28 @@ h1{
     margin-left: 600px;
     height: 100px;
 }
+/* PAGE INSCRIPTION REUSSIE*/
+.logo-inscription-reussie {
+   position: absolute;
+    top: 0;
+    left: 50%;
+}
+
+
+.bloc-inscription-reussie{
+    position: absolute;
+    width:561px;
+    height: 81px;
+    left: 410px;
+    top: 200px;
+}
+
+.inscription-reussie{
+    font-size: 68px;
+    color: #D6D6D6;
+    font-weight: bold;
+}
+
+
+
+

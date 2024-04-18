@@ -1,2 +1,17 @@
-<h1>Inscription réussie</h1>
-<p> votre email a été vérifié avec succès.</p>
+{% load static %}
+
+{% block content %}
+    <img class="logo-inscription-reussie" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="70" height="70" />
+
+    <div class="bloc-inscription-reussie">
+<h1 class="inscription-reussie">Inscription réussie</h1>
+    <p> votre email a été vérifié avec succès.</p>
+    </div>
+    </div>
+
+    <img class="" src="{% static 'JoBooking/images/img3.jpg' %}"   alt="Logo" width="70" height="70" />
+
+ {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/authentification_style.css' %}">
+    {% endblock css %}
+{% endblock %}
