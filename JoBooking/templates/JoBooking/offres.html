@@ -13,7 +13,7 @@
 
         {% if offre.title == "Plan Duo" %}
             <p class="promo-text ">✅Économisez 5€ par rapport au tarif individuel </p>
-        {% elif offre.title == "Plan Family"  %}
+        {% elif offre.title == "Plan Team"  %}
             <p class="promo-text ">✅Économisez 10€ par rapport au tarif individuel </p>
         {% endif %}
 
@@ -45,7 +45,6 @@
     {% block css %}
         <link rel="stylesheet" href="{% static 'JoBooking/offres_style.css' %}">
     {% endblock css %}
-
 {% endblock content %}
 
 

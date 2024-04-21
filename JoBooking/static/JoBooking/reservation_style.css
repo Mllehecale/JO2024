@@ -1,95 +1,161 @@
 /*PAGE PANIER*/
-
+.logo-panier{
+    position: relative;
+    left: 500px;
+}
 .mon-panier{
     position: absolute;
     color: #61A7B0;
     font-weight: bold;
-    top: 60px;
-}
+    top: 70px;
 
+}
+.image-panier{
+    opacity:0.3;
+    position: absolute;
+    top: 140px;
+    width: 900px;
+    height: 490px;
+    border-bottom: 0;
+}
 .conteneur-panier{
-    width: 672px;
-    border-top: 2px solid black;
-    margin-top: 60px;
+    width: 675px;
+    margin-top: 80px;
+    background-color: #ffffff;
 
 }
+
+.offre{
+    display: flex;
+    flex-direction: row;
+    font-size: 15px;
+    box-sizing: border-box;
+    margin-right: 10px;
+    margin-top: 30px;
+    border :1px solid #b09e4c;
+
+
+}
+.infos-offre{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:200px;
+    margin-left: 240px;
+    color: #063f42;
+    font-weight:bold;
+
+}
+
 .cadre-panier{
-  display: flex;
-    flex-direction: column;
-    max-width: 695px;
-    height: 500px;
-    background-color: #c8f8ff;
-    margin-left: 672px;
-    margin-top: -450px;
+    position:absolute;
+    top:20px;
+    width:460px;
+    height: 610px;
+    background-color: rgb(0, 0, 0);
+    margin-left:880px;
+    bottom: 0;
+    border-radius:6px;
+
+}
+.recap,.offre-recap{
+    color: white;
+    margin-left: 10px;
+
+}
+
+.offre-recap{
+    margin-top: 50px;
+}
+
+.btn-annulation{
+    position: absolute;
+    bottom: 0;
+    width: 256px;
+    height: 50px;
+    border: none;
+    background-color:lightblue;
+    color: black;
+    font-size: 15px;
+    font-family: "Inter Semi Bold", sans-serif;
+    font-weight: bold;
+}
+.btn-validation{
+    position: absolute;
+    bottom: 0;
+    width: 200px;
+    height: 46px;
+    background-color: #ffffff;
+    color: rgba(82, 229, 218, 0.71);
+    font-size: 15px;
+    font-family: "Inter Semi Bold", sans-serif;
+    font-weight: bold;
+    margin-left: 256px;
+    border: 2px solid #78CBD6;
+    text-decoration: none;
+    text-align: center;
+    line-height: 40px;
 }
 
 
 .details{
+    box-sizing: border-box;
+    border :2px solid #b09e4c;
     display: flex;
+    flex-direction: row;
+    gap: 40px;
     justify-content:flex-start;
-    margin-top: 30px;
-    margin-right: 700px;
+    margin-right: 10px;
     font-size: 15px;
     font-family: "Inter Semi Bold", sans-serif;
-
-
-
-
+    color: #D6C278;
+    font-weight: bold;
 }
 
 .details span{
-    margin-right:8rem;
-    margin-left:20px;
-    margin-top: 20px;
+    margin-right:5rem;
+    margin-left:25px;
+    margin-top: 10px;
 
 }
 
-.offre-nom,.nb-billets,.offre-prix,.offre-supprimer{
+.offre-nom, .nb-billets, .offre-prix, .offre-supprimer {
     flex-grow: 1;
 }
 
-.infos-offre span{
-    top:50px;
-    margin-right: 10rem;
-    margin-left: 10rem;
-}
 
-
-
-
-
-/*PAGE MES RESERVATIONS*/
-h1{
+    /*PAGE MES RESERVATIONS*/
+h1 {
     color: #61A7B0;
     text-align: center;
     font-weight: bold;
 }
 
-h2{
+h2 {
     color: #78CBD6;
 }
-.offre-achete{
+
+.offre-achete {
     margin-top: 50px;
     margin-left: 150px;
     box-sizing: border-box;
     border: 2px solid #D6C278;
     color: #606F7B;
     width: 80%;
-
 }
-.commande-confirme{
-    margin-left:850px;
+
+.commande-confirme {
+    margin-left: 850px;
     color: #B0A9A9;
 
 }
 
 
-
 /*PAGE PANIER VIDE*/
-.zero-panier{
+.zero-panier {
     font-family: "Inter Semi Bold", sans-serif;
-    font-size:40px;
+    font-size: 40px;
     color: #606F7B;
     text-align: center;
-    margin-top:150px;
+    margin-top: 150px;
 }

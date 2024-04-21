@@ -144,6 +144,3 @@ boutonannulation.addEventListener("click",declencherannulation)
 
 
 
-
-
-

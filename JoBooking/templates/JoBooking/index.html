@@ -17,15 +17,13 @@
             <h5>Prévu dans 211 jours</h5>
         </div>
         <div id="sidebar" class="nav-menu">
-            <ul class="nav-menu-list">
-                <li class="menu-items">Accueil</li>
-                <li class="menu-items">Jeux</li>
-                <li class="menu-items">Offres</li>
-                <li class="menu-items"> Mes réservations</li>
-                <li class="menu-items"> Inscription</li>
-                <a href="{% url 'commande' %}" id="nombre-reservation" class="menu-items">🧺Panier</a>
+            <a href="{% url 'index' %}" class="menu-items">Accueil</a>
+            <a href="#" class="menu-items">Jeux</a>
+             <a href="{% url 'offres' %}" class="menu-items">Offres</a>
+            <a href="{% url 'reservation' %}" class="menu-items">Mes réservations</a>
+            <a href="{% url 'inscription' %}" class="menu-items"> Inscription</a>
+            <a href="{% url 'commande' %}" id="nombre-reservation" class="menu-items">🧺Panier</a>
 
-            </ul>
             <div class="top-controle">
     {% if user.is_authenticated %}
     <p class="menu-items-bienvenue">Bienvenue,{{user.first_name}} !</p>

@@ -28,7 +28,7 @@ header {
     justify-content: space-between; /* Espacement égal entre les éléments à l'intérieur de la barre de navigation */
 }
 
-.menu-items{
+.menu-items {
     list-style-type: none;
     color: white;
     display:inline-block;
