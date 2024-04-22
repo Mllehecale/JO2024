@@ -60,18 +60,24 @@ function addOffre(offre) {
     nombreReservation();
 }
 
-// function supprime une offre dans le panier
-//function supprimerOffre(offre){
-  //  let panier=getPanier();
-    //delete panier[offre.id];
-    //savePanier(panier);
-   // const OffrePanier=document.querySelector(`.offre[data-offre-id="${offre.id}"]`);
-    //if (OffrePanier){
-      //  OffrePanier.parentElement.remove();
-    //}
+// function mise a jour du recapitulatif de la commande  maj=mise a jour
+//function majRecapCommande() {
+  //  const panier=getPanier()
+    //const recapCommande=document.querySelector('.offre-recap');
+    //recapCommande.querySelectorAll('.offre-recap-items').forEach(offreRecapItem =>{
+      //  const offreId=offreRecapItem.dataset.offreId;
+        //const offreRecapEnsemble=panier[offreId]
+        //if (offreRecapEnsemble){
 
-    //nombreReservation();
+        //}else{
+          //  offreRecapEnsemble.parentNode.parentNode.remove();
+        //}
+        //if (Object.keys(panier).length===0){
+           // window.location.href='panier_vide.html'
+        //}
+   // })
 //}
+
 
 // acquisition token    code source :django documentation
 function getCookie(name) {
@@ -110,6 +116,8 @@ function dataPanier(){
 
 //function pour supprimer une offre du panier
 function supprimerOffre(offreId) {
+    const offrePanier = document.querySelector(`[data-offre-id="${offreId}"]`);
+    const offreRecap = document.querySelector(`.offre-recap-items[data-offre-id="${offreId}"]`);
     const csrftoken = getCookie('csrftoken');
     const url = 'http://127.0.0.1:8000/commande/supprimer_offre';
     fetch(url, {
@@ -122,14 +130,19 @@ function supprimerOffre(offreId) {
     })
         .then(response => {
             if (response.ok) {
-                response.json().then(data => {
-                    const offrePanier = document.querySelector(`.offre[data-offre-id="${offreId}"]`);
+                let panier=getPanier();
+                delete panier[offreId];
+                savePanier(panier);
                     if (offrePanier) {
-                        offrePanier.remove();
+                        const offrePanierEnsemble=offrePanier.parentNode.parentNode;
+                        offrePanierEnsemble.remove();
+                        if(offreRecap){
+                            offreRecap.remove();
+                        }
+                        console.log('element supprimé')
                     } else {
                         console.error('offre panier pas trouvé sur page');
                     }
-                });
             } else {
                 console.error('error durant suppression de offre dans panier')
             }
@@ -181,7 +194,6 @@ boutonsupp.addEventListener('click',function (){
 
     });
 });
-
 
 
 //BOUTON PAIEMENT

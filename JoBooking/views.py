@@ -198,6 +198,8 @@ def commande(request):
         return render(request, 'panier_vide.html')
 
 
+
+
 # methode pour annuler une réservation au complet
 def annulation(request):
     commandes_impayees = Commande.objects.filter(user=request.user, paiement=False)
@@ -217,8 +219,10 @@ def supprimer_offre(request):
         print('données envoyés par front:', panier_data)
         offre_id = panier_data.get('offre_id')
         Commande.objects.filter(user=user, offre_id=offre_id).delete()
+        print('offre supprimé du panier')
 
     return redirect('commande')
+
 
 def remerciements(request):
     return render(request, 'remerciements.html')

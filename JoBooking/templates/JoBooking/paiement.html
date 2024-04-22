@@ -1,9 +1,33 @@
 {% load static %}
+<header  class="top-paiement">
+<img class="logo-paiement" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="70" height="70" />
 <h1>Paiement</h1>
-<h2>Vous êtes sur le point de finaliser votre réservation</h2>
-<p>Si vous souhaitez continuer, cliquer sur le bouton :</p>
-
+</header>
+<body class="font-paiement">
+<h2 style="color: white">Vous êtes sur le point de finaliser votre réservation</h2>
+<div class="form-bancaire">
+<h2 class="titre-form-bancaire">Information coordonnées bancaires</h2>
+<form action="">
+    <label >Titulaire de la carte:</label>
+    <input type="text" placeholder="{{ user.last_name }} {{ user.first_name }}"><br>
+<label >Numéro de carte:</label>
+    <input type="text" placeholder="xxxxxxx-mockup">
+    <img src="{% static 'JoBooking/images/CB.jpg' %}" alt="type cart credit" width="150" height="30"><br>
+<label >Date d'expiration:</label>
+    <input type="text" placeholder="01/26"><br>
+<label >cvv:</label>
+    <input type="text" placeholder="x6x"><br>
+    <input type="checkbox">
+    <label for="">J'accepte la politique commerciale</label>
+</form>
+</div>
+<a href="{% url 'commande' %}"><button id="btnback" >Retour au panier</button></a>
 <button id="btnpayer" >Payer</button>
+</body>
+{% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
+    {% endblock css %}
+
 
 {% block js %}
 <script src="{% static 'JoBooking/script.js' %}"></script>
