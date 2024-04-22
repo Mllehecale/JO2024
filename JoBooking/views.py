@@ -210,6 +210,16 @@ def annulation(request):
     return redirect('index')  # retourne vers la page d'accueil
 
 
+def supprimer_offre(request):
+    if request.method == 'POST':
+        user = request.user
+        panier_data = json.loads(request.body)
+        print('données envoyés par front:', panier_data)
+        offre_id = panier_data.get('offre_id')
+        Commande.objects.filter(user=user, offre_id=offre_id).delete()
+
+    return redirect('commande')
+
 def remerciements(request):
     return render(request, 'remerciements.html')
 
@@ -317,7 +327,6 @@ def reservation(request):
     reservation_user, created = Reservation.objects.get_or_create(user=request.user)
     commandes_payees = Commande.objects.filter(user=request.user, paiement=True)
 
-
     if created:
         reservation_user.commandes.set(commandes_payees)
         reservation_user.save()
@@ -335,4 +344,4 @@ def reservation(request):
                 reservation_user.commandes.add(commande)
         reservation_user.save()
 
-    return render(request, 'reservation.html', context={'commandes_payees': commandes_payees,'qr_path':qr_path})
+    return render(request, 'reservation.html', context={'commandes_payees': commandes_payees, 'qr_path': qr_path})

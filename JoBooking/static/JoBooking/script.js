@@ -1,8 +1,8 @@
 console.log('hello');  // pour vérifier si script reconnu
 
-//document.addEventListener('DOMContentLoaded',function (){
-  // console.log('Le DOM est chargé')
-//})
+document.addEventListener('DOMContentLoaded',function (){
+   console.log('Le DOM est chargé')
+})
 
 // fonction pour récupérer panier dans localStorage
 function getPanier(){
@@ -60,6 +60,18 @@ function addOffre(offre) {
     nombreReservation();
 }
 
+// function supprime une offre dans le panier
+//function supprimerOffre(offre){
+  //  let panier=getPanier();
+    //delete panier[offre.id];
+    //savePanier(panier);
+   // const OffrePanier=document.querySelector(`.offre[data-offre-id="${offre.id}"]`);
+    //if (OffrePanier){
+      //  OffrePanier.parentElement.remove();
+    //}
+
+    //nombreReservation();
+//}
 
 // acquisition token    code source :django documentation
 function getCookie(name) {
@@ -96,7 +108,37 @@ function dataPanier(){
 
 }
 
+//function pour supprimer une offre du panier
+function supprimerOffre(offreId) {
+    const csrftoken = getCookie('csrftoken');
+    const url = 'http://127.0.0.1:8000/commande/supprimer_offre';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({offre_id: offreId})
+    })
+        .then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+                    const offrePanier = document.querySelector(`.offre[data-offre-id="${offreId}"]`);
+                    if (offrePanier) {
+                        offrePanier.remove();
+                    } else {
+                        console.error('offre panier pas trouvé sur page');
+                    }
+                });
+            } else {
+                console.error('error durant suppression de offre dans panier')
+            }
+        })
+        .catch(error => {
+            console.error('voici lerreur:', error);
 
+        });
+}
 
 
 // BOUTON DE RESERVATION
@@ -114,9 +156,31 @@ boutonsReserver.forEach(bouton => {
         dataPanier();
     });
 
-}
-);
+});
 
+
+//BOUTON ANNULATION DE LA COMMANDE ENTIERE
+const boutonannulation=document.getElementById('btn-annulation')
+function declencherannulation(){
+    console.log('bouton annuler opérationnel');
+    window.location.href='annulation';
+    deletePanier();
+
+}
+boutonannulation.addEventListener("click",declencherannulation)
+
+
+// BOUTON SUPPRIMER UNE OFFRE DE LA COMMANDE
+const boutonsupprimeroffre = document.querySelectorAll('.btn-supprimer');
+boutonsupprimeroffre.forEach(boutonsupp=>{
+boutonsupp.addEventListener('click',function (){
+
+    console.log("btn supprimer fonctionne");
+        const offreId = this.getAttribute('data-offre-id');
+    supprimerOffre(offreId);
+
+    });
+});
 
 
 
@@ -129,18 +193,6 @@ function declencherpaiement (){
 
 }
 boutonpaiement.addEventListener("click",declencherpaiement);
-
-
-
-//BOUTON ANNULATION DE LA COMMANDE
-const boutonannulation=document.getElementById('btn-annulation')
-function declencherannulation(){
-    console.log('bouton annuler opérationnel');
-    window.location.href='annulation';
-    deletePanier();
-
-}
-boutonannulation.addEventListener("click",declencherannulation)
 
 
 

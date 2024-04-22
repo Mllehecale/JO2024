@@ -20,5 +20,5 @@ urlpatterns = [
     path("reservation/", views.reservation, name="reservation"),
     path("remerciements/", views.remerciements, name="remerciements"),
     path("telechargement_pdf/", views.telechargement_pdf, name="telechargement_pdf"),
-
+    path("commande/supprimer_offre", views.supprimer_offre, name="supprimer_offre"),
 ]

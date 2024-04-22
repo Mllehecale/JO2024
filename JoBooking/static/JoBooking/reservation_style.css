@@ -21,8 +21,6 @@
 .conteneur-panier{
     width: 675px;
     margin-top: 80px;
-    background-color: #ffffff;
-
 }
 
 .offre{
@@ -33,6 +31,7 @@
     margin-right: 10px;
     margin-top: 30px;
     border :1px solid #b09e4c;
+    color: black;
 
 
 }
@@ -40,11 +39,22 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap:200px;
+    gap:235px;
     margin-left: 240px;
     color: #063f42;
     font-weight:bold;
+}
 
+.btn-supprimer{
+    background-color: #78CBD6;
+    color: white;
+    border: 2px solid #78CBD6;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.btn-supprimer:hover{
+    background-color:#D6C278 ;
 }
 
 .cadre-panier{
@@ -68,7 +78,7 @@
     margin-top: 50px;
 }
 
-.btn-annulation{
+#btn-annulation{
     position: absolute;
     bottom: 0;
     width: 256px;
@@ -79,14 +89,20 @@
     font-size: 15px;
     font-family: "Inter Semi Bold", sans-serif;
     font-weight: bold;
+    cursor: pointer;
 }
+#btn-annulation:hover{
+    background-color: #D6C278;
+}
+
+
 .btn-validation{
     position: absolute;
     bottom: 0;
     width: 200px;
     height: 46px;
     background-color: #ffffff;
-    color: rgba(82, 229, 218, 0.71);
+    color: rgba(50, 178, 166, 0.71);
     font-size: 15px;
     font-family: "Inter Semi Bold", sans-serif;
     font-weight: bold;

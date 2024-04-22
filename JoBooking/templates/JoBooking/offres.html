@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-
 {% for offre in offres %}
 <div class="contenu-offre">
     <ul>
@@ -24,8 +23,6 @@
             <li>▶️Livraison par telechargement</li><br>
             <li>▶️Acces à tous les jeux disponibles</li><br>
         </ul>
-
-
     {% if user.is_authenticated %}
         {% if offre.id in commandes_user %}
             <p class="avertissement">Vous avez déjà selectionné cette offre.</p>
