@@ -193,29 +193,38 @@ h2 {
 .top-paiement h1{
     position: absolute;
     left: 0;
-    top:20px
+    top:10px
 }
 .form-bancaire{
     box-sizing: border-box;
     background-color:#FFFFFF;
     max-width: 500px;
-    margin-left: 20px;
+    margin-left:50px;
     height: 400px;
     border-radius: 6px;
     color: #B0A9A9;
 }
 .titre-form-bancaire{
-    color: #D6C278;
+    color: rgba(210, 208, 208, 0.44);
     text-align: center;
+    border-bottom: 3px dotted rgba(210, 208, 208, 0.44); ;
+    margin-left: 20px;
+    margin-right: 30px;
+    margin-bottom:20px;
 }
 .form-bancaire input{
-    margin-bottom: 5px;
+    margin-bottom:5px;
+    border-radius: 10px;
+    width:auto;
+    height: 30px;
+    border:2px solid #EAEAEA;
+    color: #B0A9A9;
     display: block;
 
 }
 
 #btnback{
-    margin-left: 20px;
+    margin-left: 50px;
     margin-top: 20px;
     height: 30px;
     width: 150px;
@@ -227,9 +236,25 @@ h2 {
     height: 30px;
     width: 150px;
     border-radius: 3px;
-    background-color: #0E7177;
+    background-color: rgba(82, 229, 218, 0.71);
     color: white;
     border-color: white;
 
 }
 
+.barre{
+    margin-right: 80px;
+    border-top: 2px solid rgba(210, 208, 208, 0.44);
+    margin-top: 50px;
+}
+
+.livraison{
+    margin-top: 50px;
+
+}
+.total{
+    position: absolute;
+    bottom: 10px;
+    font-size: 20px;
+    color: #D6C278;
+}

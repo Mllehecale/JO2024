@@ -264,7 +264,13 @@ def telechargement_pdf(request):
 
 
 def paiement(request):
-    return render(request, 'paiement.html')
+    total=0  # mise en place logique calcul total du panier
+    user = request.user
+    commandes_impayees = Commande.objects.filter(user=user, paiement=False)
+    if commandes_impayees:
+        for commande in commandes_impayees:
+            total +=commande.offre.price
+    return render(request, 'paiement.html', context={'commandes_impayees': commandes_impayees,'total':total})
 
 
 # création billets  téléchargeables + qr code

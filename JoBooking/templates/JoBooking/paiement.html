@@ -4,7 +4,7 @@
 <h1>Paiement</h1>
 </header>
 <body class="font-paiement">
-<h2 style="color: white">Vous êtes sur le point de finaliser votre réservation</h2>
+<h2 style="color: white;font-size:20px">Vous êtes sur le point de finaliser votre réservation</h2>
 <div class="form-bancaire">
 <h2 class="titre-form-bancaire">Information coordonnées bancaires</h2>
 <form action="">
@@ -12,7 +12,7 @@
     <input type="text" placeholder="{{ user.last_name }} {{ user.first_name }}"><br>
 <label >Numéro de carte:</label>
     <input type="text" placeholder="xxxxxxx-mockup">
-    <img src="{% static 'JoBooking/images/CB.jpg' %}" alt="type cart credit" width="150" height="30"><br>
+    <span><img src="{% static 'JoBooking/images/CB.jpg' %}" alt="type cart credit" width="150" height="30"></span><br>
 <label >Date d'expiration:</label>
     <input type="text" placeholder="01/26"><br>
 <label >cvv:</label>
@@ -23,6 +23,24 @@
 </div>
 <a href="{% url 'commande' %}"><button id="btnback" >Retour au panier</button></a>
 <button id="btnpayer" >Payer</button>
+
+<div class="cadre-panier">
+    <h4 class="recap" > Récapitulatif de la commande</h4>
+    <div class="offre-recap" >
+        {% if commandes_impayees %}
+{% for commande in commandes_impayees %}
+        <div class="offre-recap-items" data-offre-id="{{ commande.offre.id }}">
+    <h2>{{commande.offre.title}}</h2>
+    <h3>{{commande.offre.price}}€</h3>
+{% endfor %}
+    {% endif %}
+    </div>
+        <div class="barre"></div>
+        <div class="livraison">Livraison : Gratuit (telechargement)</div>
+        <div class="barre"></div>
+        <div class="total"> Total : {{ total }}€</div>
+    </div>
+
 </body>
 {% block css %}
         <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
