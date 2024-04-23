@@ -25,7 +25,7 @@ class TestCreateUser(TestCase):
         assert user.is_staff is False
         assert user.cle_inscription == 't1e2s3t'
 
-# test inscription  avec données non valides
+    # test inscription  avec données non valides
     def test_create_user_invalid_data(self):
         with self.assertRaises(ValueError):
             CustomUser.objects.create_user(

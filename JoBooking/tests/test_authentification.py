@@ -12,9 +12,9 @@ class TestAuthentification(TestCase):
     # test de connexion avec données valides.
     def test_connexion_valid_data(self):
         response = self.client.post("/connexion/", {'email': 'test@test.com', 'password': 'testtest'})
-        self.assertRedirects(response, "/", status_code=302)  # ici on s'attend a une redirection
+        self.assertRedirects(response, "/", status_code=302)  # ici on s'attend a une redirection vers page dacceuil
 
-        # test de connexion avec données valides.
+        # test de connexion avec données invalides.
 
     def test_connexion_invalid_data(self):
         response = self.client.post("/connexion/", {'email': 'testtest.com', 'password': 'testes'})
