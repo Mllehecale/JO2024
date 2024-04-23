@@ -1,4 +1,6 @@
 {% load static %}
+{% block content %}
+
 <header  class="top-paiement">
 <img class="logo-paiement" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="70" height="70" />
 <h1>Paiement</h1>
@@ -40,13 +42,13 @@
         <div class="barre"></div>
         <div class="total"> Total : {{ total }}€</div>
     </div>
-
+</div>
 </body>
 {% block css %}
         <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
     {% endblock css %}
 
-
 {% block js %}
 <script src="{% static 'JoBooking/script.js' %}"></script>
 {% endblock %}
+{% endblock content %}

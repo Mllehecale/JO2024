@@ -198,8 +198,6 @@ def commande(request):
         return render(request, 'panier_vide.html')
 
 
-
-
 # methode pour annuler une réservation au complet
 def annulation(request):
     commandes_impayees = Commande.objects.filter(user=request.user, paiement=False)
@@ -264,13 +262,13 @@ def telechargement_pdf(request):
 
 
 def paiement(request):
-    total=0  # mise en place logique calcul total du panier
+    total = 0  # mise en place logique calcul total du panier
     user = request.user
     commandes_impayees = Commande.objects.filter(user=user, paiement=False)
     if commandes_impayees:
         for commande in commandes_impayees:
-            total +=commande.offre.price
-    return render(request, 'paiement.html', context={'commandes_impayees': commandes_impayees,'total':total})
+            total += commande.offre.price
+    return render(request, 'paiement.html', context={'commandes_impayees': commandes_impayees, 'total': total})
 
 
 # création billets  téléchargeables + qr code

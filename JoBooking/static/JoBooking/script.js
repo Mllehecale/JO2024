@@ -200,11 +200,11 @@ boutonsupp.addEventListener('click',function (){
 const boutonpaiement=document.getElementById('btnpayer');
 function declencherpaiement (){
     console.log('bouton payer opérationnel');
-    window.location.href='payer';
     deletePanier();
+    window.location.href='payer';
 
 }
-boutonpaiement.addEventListener("click",declencherpaiement);
+boutonpaiement.addEventListener('click',declencherpaiement);
 
 
 
