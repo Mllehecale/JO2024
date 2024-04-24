@@ -13,6 +13,8 @@ class TestCommande(TestCase):
         response = self.client.get("/commande/")
         self.assertRedirects(response, "/connexion/?next=/commande/", status_code=302)
 
+    #def test_verification_PDF_genere_transaction    :
+
 
 class TestPaiement(TestCase):
     def setUp(self):

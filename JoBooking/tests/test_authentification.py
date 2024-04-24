@@ -26,9 +26,6 @@ class TestAuthentification(TestCase):
 class TestInscriptionAuthentification(TestCase):
     def setUp(self):
         self.client = Client()
-        # self.user = CustomUser.objects.create_user(email='usertest@mail.com', password='password', first_name='user',
-        # last_name='test')
-        # Test qui vérifie si user redirigé vers page vérification email pour poursuivre inscription
 
     def test_inscription_verification_email(self):
         user_form = {
@@ -44,5 +41,3 @@ class TestInscriptionAuthentification(TestCase):
         # assert CustomUser.objects.filter(email='usertest@mail.com').exists()
         response = self.client.post("/inscription/", data=user_form)
         self.assertRedirects(response, "/verification_email/", status_code=302)
-
-

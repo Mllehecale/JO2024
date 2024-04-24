@@ -86,6 +86,8 @@ def inscription(request):
 
 
 # view vérification email
+# message pour correcteur : je me suis inspiré car c'est complexe a mettre en place
+# https://www.paleblueapps.com/rockandnull/django-email-verification/
 def verification_email(request):
     if request.method == "POST":
         if isinstance(request.user, CustomUser) and request.user.checked_email != True:
@@ -185,7 +187,8 @@ def commande(request):
                 # offre_quantity = offre_data['quantity']
                 commande, created = Commande.objects.get_or_create(user=user,
                                                                    offre_id=offre_id)  # récupération commande
-                if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée                else:  # l'offre est deja dans la commande donc on augmente la quantité
+                if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée #
+                    # else:   l'offre est deja dans la commande donc on augmente la quantité
                     # commande.quantity = offre_quantity
                     commande.save()
     # récupération des commandes impayées ( par defaut paimement = False car pas encore payé)
@@ -286,7 +289,9 @@ def creation_billet(user, offre, date):
     # permet affichage des cles de paiement  et plans choisi par l'user sur scan qrcode
     if commandes_payees:
         commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
-        cle_unique = f"clé inscription:{user.cle_inscription}|clés paiement:{'|'.join(cles_paiement)}|titulaire:{user.last_name} {user.first_name}|plan(s):{commandes_str}"
+        cle_unique = f"clé inscription:{user.cle_inscription}," \
+                     f"|clés paiement:{'|'.join(cles_paiement)}|titulaire:{user.last_name} {user.first_name}," \
+                     f"|plan(s):{commandes_str}"
         # creation du qrcode
         qr = qrcode.make(cle_unique)
         qr_path = "qr_code.png"
@@ -343,7 +348,9 @@ def reservation(request):
             cles_paiement = [commande.cle_paiement for commande in commandes_payees]
             commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
 
-            cle_unique = f"clé inscription:{commande.user.cle_inscription}|clés paiement:{'|'.join(cles_paiement)}|titulaire:{commande.user.last_name} {commande.user.first_name}|plan(s):{commandes_str}"
+            cle_unique = f"clé inscription:{commande.user.cle_inscription}," \
+                         f"|clés paiement:{'|'.join(cles_paiement)}|titulaire:{commande.user.last_name} {commande.user.first_name}," \
+                         f"|plan(s):{commandes_str}"
             # creation du qrcode
             qr = qrcode.make(cle_unique)
             qr_path = "qr_code.png"
@@ -353,3 +360,7 @@ def reservation(request):
         reservation_user.save()
 
     return render(request, 'reservation.html', context={'commandes_payees': commandes_payees, 'qr_path': qr_path})
+
+
+def jeux(request):
+    return render(request,'jeux.html')

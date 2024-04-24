@@ -1,3 +1,4 @@
+/*PAGE  OFFRE*/
 .contenu-offre{
     color: #606F7B;
     margin: 10px;
@@ -73,4 +74,35 @@
     padding:0;
 
 }
+/*PAGE jeux*/
+header{
+    background-color: #FFFFFF;
+    margin-top: 0;
+}
 
+body{
+    background-color: #c5b25a;
+}
+.titre-jeux{
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 40px;
+    margin-left:10px;
+}
+.message-jeux{
+    color: white;
+    font-size: 20px;
+    margin-left: 10px;
+}
+.jeux-sport{
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.jeux-sport img{
+    margin:10px;
+    width: calc(25%- 20px);
+    margin-top:20px;
+    margin-left: 50px;
+}

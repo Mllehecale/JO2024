@@ -21,4 +21,6 @@ urlpatterns = [
     path("remerciements/", views.remerciements, name="remerciements"),
     path("telechargement_pdf/", views.telechargement_pdf, name="telechargement_pdf"),
     path("commande/supprimer_offre", views.supprimer_offre, name="supprimer_offre"),
+    path("jeux/", views.jeux, name="jeux"),
+
 ]

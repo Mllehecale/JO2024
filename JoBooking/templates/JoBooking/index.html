@@ -18,7 +18,7 @@
         </div>
         <div id="sidebar" class="nav-menu">
             <a href="{% url 'index' %}" class="menu-items">Accueil</a>
-            <a href="#" class="menu-items">Jeux</a>
+            <a href="{% url 'jeux' %}" class="menu-items">Jeux</a>
              <a href="{% url 'offres' %}" class="menu-items">Offres</a>
             <a href="{% url 'reservation' %}" class="menu-items">Mes réservations</a>
             <a href="{% url 'inscription' %}" class="menu-items"> Inscription</a>
@@ -59,7 +59,7 @@
           <br> Des disciplines plus jeunes sont également mises en avant. <br>Exemple: Le skateboard et le breaking.<br>
            Un large choix pour un large public.<br>
            Cette nouvelle édition s'inscrira dans les mémoires tout comme les éditions précédentes.<br>
-           Pour en savoir plus , <a href=""> découvrez les différents jeux attendus.</a> </p>
+           Pour en savoir plus , <a href="{% url 'jeux' %}"> découvrez les différents jeux attendus.</a> </p>
        </div>
        <div class="titre">
            <h1>Les jeux olympiques 2024 dans la ville lumière </h1>

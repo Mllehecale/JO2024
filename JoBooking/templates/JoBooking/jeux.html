@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+<h1 class="titre-jeux">Les jeux à découvrir ...</h1>
+<h2 class="message-jeux">Reservez dès à present vos billets dans l'onglet "Offres" pour profiter de l'ensemble des tournois !</h2>
+<div class="jeux-sport">
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/basketball.jpg' %}" alt="basketball" width="200" height="150">
+        <h4 class="sport-nom">Basketball</h4>
+     </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/football.jpg' %}" alt="football" width="200" height="150">
+        <h4 class="sport-nom">Football</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/boxe.jpg' %}" alt="boxe" width="200" height="150">
+        <h4 class="sport-nom">Boxe</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/skateboard.jpg' %}" alt="skateboard" width="200" height="150">
+        <h4 class="sport-nom">Skateboard</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/tennisjeux.jpg' %}" alt="tennis" width="200" height="150">
+        <h4 class="sport-nom">Tennis</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/handball.jpg' %}" alt="handball" width="200" height="150">
+        <h4 class="sport-nom">Handball</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/natationjeux.jpg' %}" alt="natation" width="200" height="150">
+        <h4 class="sport-nom">Natation</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/surf.jpg' %}" alt="surf" width="200" height="150">
+        <h4 class="sport-nom">Surf</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/musculation.jpg' %}" alt="musculation" width="200" height="150">
+         <h4 class="sport-nom">Musculation</h4>
+    </div>
+    <div class="sport-image">
+    <img src="{% static 'JoBooking/images/jeux/golf.jpg' %}" alt="golf" width="200" height="150">
+        <h4 class="sport-nom">Golf</h4>
+    </div>
+
+</div>
+</main>
+
+
+
+
+
+
+    {% block css %}
+        <link rel="stylesheet" href="{% static 'JoBooking/offres_style.css' %}">
+    {% endblock css %}
+{% endblock content %}
