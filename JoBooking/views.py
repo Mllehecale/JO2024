@@ -77,7 +77,6 @@ def inscription(request):
                 login(request, user, backend='JoBooking.authbackends.EmailAuthBackend')
 
                 return redirect('verification_email')  # redirection de l'utilisateur vers page verification mail
-
         else:
             context['errors'] = form.errors  # erreur de validation
 
@@ -331,6 +330,7 @@ def fusion_pdf(pdf_contents, filename):
     return response
 
 
+@login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
 def reservation(request):
     reservation_user, created = Reservation.objects.get_or_create(user=request.user)
     commandes_payees = Commande.objects.filter(user=request.user, paiement=True)

@@ -19,6 +19,7 @@ class TestPaiement(TestCase):
         self.client = Client()
         self.user = CustomUser.objects.create_user(email='test@test.com', password='testtest')
 
+    # test si cle paiement generee quand user paye
     def test_cle_paiement_transaction_user(self):
         offre = Offre.objects.create(title='offretest', price=2, id=5)
         commande = Commande.objects.create(user=self.user, paiement=False, offre=offre)
@@ -30,6 +31,5 @@ class TestPaiement(TestCase):
 
         self.client.force_login(self.user)
         response = self.client.post("/commande/payer")
-
         self.assertTrue(commande.paiement)
         self.assertIsNotNone(commande.cle_paiement)

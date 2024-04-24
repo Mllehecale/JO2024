@@ -64,7 +64,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 #  modele pour créer les offres des jeux olympiques + compteur de ventes pour chaque offre
-
 class Offre(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
