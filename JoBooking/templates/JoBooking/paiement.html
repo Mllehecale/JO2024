@@ -5,27 +5,30 @@
 <img class="logo-paiement" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="70" height="70" />
 <h1>Paiement</h1>
 </header>
+
 <body class="font-paiement">
 <h2 style="color: white;font-size:20px">Vous êtes sur le point de finaliser votre réservation</h2>
 <div class="form-bancaire">
 <h2 class="titre-form-bancaire">Information coordonnées bancaires</h2>
 <form action="">
-    <label >Titulaire de la carte:</label>
-    <input type="text" placeholder="{{ user.last_name }} {{ user.first_name }}"><br>
-<label >Numéro de carte:</label>
-    <input type="text" placeholder="xxxxxxx-mockup">
+    <label for="titulaire" >Titulaire de la carte:</label>
+    <input type="text" id="titulaire" placeholder="{{ user.last_name }} {{ user.first_name }}"><br>
+<label for="numero" >Numéro de carte:</label>
+    <input type="text" id="numero" placeholder="xxxxxxx-mockup">
     <span><img src="{% static 'JoBooking/images/CB.jpg' %}" alt="type cart credit" width="150" height="30"></span><br>
-<label >Date d'expiration:</label>
-    <input type="text" placeholder="01/26"><br>
-<label >cvv:</label>
-    <input type="text" placeholder="x6x"><br>
-    <input type="checkbox">
-    <label for="">J'accepte la politique commerciale</label>
+<label for="date-expiration" >Date d'expiration:</label>
+    <input type="text" id="date-expiration" placeholder="01/26"><br>
+<label for="cvv" >cvv:</label>
+    <input type="text" id="cvv" placeholder="x6x"><br>
+    <input type="checkbox" id="poltique">
+    <label for="poltique">J'accepte la politique commerciale</label>
 </form>
 </div>
-<a href="{% url 'commande' %}"><button id="btnback" >Retour au panier</button></a>
-<button id="btnpayer" >Payer</button>
 
+
+
+<a href="{% url 'commande' %}"><button id="btnback" >Retour au panier</button></a>
+<button id="btn-payer">Payer</button>
 <div class="cadre-panier">
     <h4 class="recap" > Récapitulatif de la commande</h4>
     <div class="offre-recap" >
@@ -41,14 +44,17 @@
         <div class="livraison">Livraison : Gratuit (telechargement)</div>
         <div class="barre"></div>
         <div class="total"> Total : {{ total }}€</div>
+
     </div>
 </div>
 </body>
 {% block css %}
         <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
     {% endblock css %}
+{% endblock content %}
+
 
 {% block js %}
 <script src="{% static 'JoBooking/script.js' %}"></script>
 {% endblock %}
-{% endblock content %}
+

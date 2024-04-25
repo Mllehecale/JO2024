@@ -211,7 +211,6 @@ def annulation(request):
 
     return redirect('index')  # retourne vers la page d'accueil
 
-
 def supprimer_offre(request):
     if request.method == 'POST':
         user = request.user
@@ -364,3 +363,6 @@ def reservation(request):
 
 def jeux(request):
     return render(request,'jeux.html')
+
+def panier_vide(request):
+    return render(request,'Panier_vide.html')

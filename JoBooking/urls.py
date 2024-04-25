@@ -22,5 +22,6 @@ urlpatterns = [
     path("telechargement_pdf/", views.telechargement_pdf, name="telechargement_pdf"),
     path("commande/supprimer_offre", views.supprimer_offre, name="supprimer_offre"),
     path("jeux/", views.jeux, name="jeux"),
+    path("commande/panier_vide/", views.panier_vide, name="panier_vide"),
 
 ]

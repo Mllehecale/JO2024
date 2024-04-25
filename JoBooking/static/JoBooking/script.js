@@ -60,25 +60,6 @@ function addOffre(offre) {
     nombreReservation();
 }
 
-// function mise a jour du recapitulatif de la commande  maj=mise a jour
-//function majRecapCommande() {
-  //  const panier=getPanier()
-    //const recapCommande=document.querySelector('.offre-recap');
-    //recapCommande.querySelectorAll('.offre-recap-items').forEach(offreRecapItem =>{
-      //  const offreId=offreRecapItem.dataset.offreId;
-        //const offreRecapEnsemble=panier[offreId]
-        //if (offreRecapEnsemble){
-
-        //}else{
-          //  offreRecapEnsemble.parentNode.parentNode.remove();
-        //}
-        //if (Object.keys(panier).length===0){
-           // window.location.href='panier_vide.html'
-        //}
-   // })
-//}
-
-
 // acquisition token    code source :django documentation
 function getCookie(name) {
     let cookieValue = null;
@@ -141,6 +122,9 @@ function supprimerOffre(offreId) {
                             offreRecap.remove()
                         }
                         console.log('element supprimé')
+                        if (Object.keys(panier).length===0){
+                            window.location.href='panier_vide'
+                        }
                     } else {
                         console.error('offre panier pas trouvé sur page');
                     }
@@ -173,15 +157,18 @@ boutonsReserver.forEach(bouton => {
 });
 
 
-//BOUTON ANNULATION DE LA COMMANDE ENTIERE
-const boutonannulation=document.getElementById('btn-annulation')
+document.addEventListener('DOMContentLoaded',function (){
+    //BOUTON ANNULATION DE LA COMMANDE ENTIERE
+const boutonAnnulation=document.getElementById('btn-annulation')
 function declencherannulation(){
     console.log('bouton annuler opérationnel');
     window.location.href='annulation';
     deletePanier();
 
 }
-boutonannulation.addEventListener("click",declencherannulation)
+boutonAnnulation.addEventListener('click',declencherannulation)
+})
+
 
 
 // BOUTON SUPPRIMER UNE OFFRE DE LA COMMANDE
@@ -198,14 +185,11 @@ boutonsupp.addEventListener('click',function (){
 
 
 //BOUTON PAIEMENT
-const boutonpaiement=document.getElementById('btnpayer');
-function declencherpaiement (){
-    console.log('bouton payer opérationnel');
-    deletePanier();
+const boutonpaiement=document.getElementById('btn-payer')
+console.log(boutonpaiement)
+function  declencherpaiement(){
+    console.log('bouton payer opérationnel ');
     window.location.href='payer';
-
+    deletePanier();
 }
-boutonpaiement.addEventListener('click',declencherpaiement);
-
-
-
+boutonpaiement.addEventListener('click',declencherpaiement)
