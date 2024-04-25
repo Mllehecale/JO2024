@@ -22,7 +22,7 @@ header {
     width: 694px;
     position: absolute;
     top: 0; /* Aligner en haut de la page */
-    right: 0; /* Aligner à droite de la page */
+    left: 655px; /* Aligner à droite de la page */
     display:flex; /* Utiliser le modèle de boîte flexible pour les enfants directs */
     align-items: center; /* Centrer verticalement les éléments dans la barre de navigation */
     justify-content: space-between; /* Espacement égal entre les éléments à l'intérieur de la barre de navigation */
@@ -115,10 +115,10 @@ div.img1{
     color: #78CBD6;
     position: absolute;
     top: 70px;
-    right: 40px;
+    left: 750px;
     width: 502px;
     height: 170px;
-    font-weight: 600;
+    font-weight: bold;
     font-size: 22px;
     line-height: 50px;
 
@@ -127,22 +127,21 @@ div.img1{
 .description{
     position: absolute;
     top: 200px;
-    right: 30px;
-    left:700px
+    left:700px;
+    max-width: 650px;
 }
 
 .Paris {
     position: absolute;
     top: 350px;
-    right: 40px;
     left:800px;
     color:#D6C278;
 }
 .infos{
     position: absolute;
     top: 430px;
-    right:30px;
     left:700px;
+    max-width: 650px;
 }
 .infos h2{
    color: #063f42;
@@ -153,21 +152,22 @@ div.img1{
     top: 655px;
     right:0;
     left:656px;
-    margin-bottom: 50px;
     opacity: 80%;
 
 }
 
 
 /*bas de page PAGE ACCUEIL*/
-footer p{
-    top:120px;
+footer {
+    /*position: absolute;*/
+    /*top: 1020px;*/
+
+
 }
 footer p{
-    position: absolute;
-    width: 100%;
-    background-color: rgba(82, 229, 218, 0.56); /* Couleur de fond du footer */
-    padding: 15px;
+    width: 1317px;
+    background-color: rgb(176, 158, 76); /* Couleur de fond du footer */
     text-align: center;
+    padding: 15px;
 
 }

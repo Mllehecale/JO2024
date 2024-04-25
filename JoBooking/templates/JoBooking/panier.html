@@ -23,23 +23,25 @@
 {% endif %}
 </div>
 
-  <div class="cadre-panier">
+<div class="cadre-panier">
     <h4 class="recap" > Récapitulatif de la commande</h4>
     <div class="offre-recap" >
-    {% if commandes_impayees %}
-{% for commande in commandes_impayees %}
-        <div class="offre-recap-items" data-offre-id="{{ commande.offre.id }}">
-    <h2>{{commande.offre.title}}</h2>
-    <h3>{{commande.offre.price}}€</h3>
-{% endfor %}
+        {% if commandes_impayees %}
+            {% for commande in commandes_impayees %}
+                <div class="offre-recap-items" data-offre-id="{{ commande.offre.id }}">
+                    <h2>{{commande.offre.title}}</h2>
+                    <h3>{{commande.offre.price}}€</h3>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: red">Aucun élément dans le panier</p>
+        {% endif %}
     </div>
-    </div>
-  <button id="btn-annulation">Annuler</button>
+</div>
+    <button id="btn-annulation">Annuler</button>
 <a class="btn-validation" href="{% url 'paiement' %}">Valider la commande </a>
-{% else %}
-    <p style="color: red">Aucun élément dans le panier</p>
-{% endif %}
-  </div>
+
+
  {% block css %}
         <link rel="stylesheet" href="{% static 'JoBooking/reservation_style.css' %}">
     {% endblock css %}

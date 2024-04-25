@@ -117,7 +117,6 @@ function dataPanier(){
 //function pour supprimer une offre du panier
 function supprimerOffre(offreId) {
     const offrePanier = document.querySelector(`[data-offre-id="${offreId}"]`);
-    const offreRecap = document.querySelector(`.offre-recap-items[data-offre-id="${offreId}"]`);
     const csrftoken = getCookie('csrftoken');
     const url = 'http://127.0.0.1:8000/commande/supprimer_offre';
     fetch(url, {
@@ -136,8 +135,10 @@ function supprimerOffre(offreId) {
                     if (offrePanier) {
                         const offrePanierEnsemble=offrePanier.parentNode.parentNode;
                         offrePanierEnsemble.remove();
+                        offreId=offrePanier.getAttribute('data-offre-id');
+                        const offreRecap = document.querySelector(`.offre-recap-items[data-offre-id="${offreId}"]`);
                         if(offreRecap){
-                            offreRecap.remove();
+                            offreRecap.remove()
                         }
                         console.log('element supprimé')
                     } else {
