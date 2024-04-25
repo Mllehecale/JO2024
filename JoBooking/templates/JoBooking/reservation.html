@@ -6,14 +6,19 @@
     <h1>Mes Réservations </h1>
 </div>
 <h4>Vous pouvez retrouver ici, l'ensemble de vos réservations.Pour retrouver vos commandes en cours.</h4>
-    <a href="">Rendez-vous la page panier</a>
+ <a href="">Rendez-vous la page panier</a>
 {% if commandes_payees %}
     {% for commande in commandes_payees %}
         <div class="offre-achete">
-        <h2>{{commande.offre.title}}</h2>
-        <p>Date & heure de la réservation :{{ commande.date_commande }}</p>
-        <p class="commande-confirme">✅ Confirmé</p>
-        <img src="{{ qr_path }}" alt="QRCode Commande">
+            <h2>{{commande.offre.title}}</h2>
+            <p>Date & heure de la réservation :{{ commande.date_commande }}</p>
+            <p class="commande-confirme">✅ Confirmé</p>
+            {% if commande.billet_pdf %}
+            <a href="{{ commande.billet_pdf.url }}" download="">Billet</a>
+            {% else %}
+                <p>pas de billet disponible</p>
+            {% endif %}
+
         </div>
     {% endfor %}
 {% else %}

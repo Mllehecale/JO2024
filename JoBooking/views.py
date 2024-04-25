@@ -19,6 +19,8 @@ from PyPDF2 import PdfMerger, PdfReader
 from io import BytesIO
 from django.http import HttpResponse
 import qrcode
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
@@ -211,6 +213,7 @@ def annulation(request):
 
     return redirect('index')  # retourne vers la page d'accueil
 
+
 def supprimer_offre(request):
     if request.method == 'POST':
         user = request.user
@@ -336,33 +339,41 @@ def fusion_pdf(pdf_contents, filename):
 
 @login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
 def reservation(request):
+    offres_billets = []
     reservation_user, created = Reservation.objects.get_or_create(user=request.user)
     commandes_payees = Commande.objects.filter(user=request.user, paiement=True)
 
+    user = request.user
     if created:
         reservation_user.commandes.set(commandes_payees)
         reservation_user.save()
     else:
         for commande in commandes_payees:
-            cles_paiement = [commande.cle_paiement for commande in commandes_payees]
-            commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
+            if commande.billet_pdf:
+                billet_telechargement = commande.billet_pdf.url
+            else:
+                user = request.user
+                offre = commande.offre  # récupration du plan dans la commande
+                date = commande.date_commande
+                pdf_telechageable = creation_billet(user, offre, date)
+                pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
+                file_name = f"billet_{commande.offre.title}.pdf"
+                file_path = default_storage.save(file_name, ContentFile(pdf_content))
+                commande.billet_pdf.name = file_path
+                billet_telechargement = default_storage.url(file_path)
 
-            cle_unique = f"clé inscription:{commande.user.cle_inscription}," \
-                         f"|clés paiement:{'|'.join(cles_paiement)}|titulaire:{commande.user.last_name} {commande.user.first_name}," \
-                         f"|plan(s):{commandes_str}"
-            # creation du qrcode
-            qr = qrcode.make(cle_unique)
-            qr_path = "qr_code.png"
-            qr.save(qr_path)
+            offres_billets.append({'offre': commande.offre, 'billet_telechargement': billet_telechargement})
             if commande not in reservation_user.commandes.all():
                 reservation_user.commandes.add(commande)
         reservation_user.save()
 
-    return render(request, 'reservation.html', context={'commandes_payees': commandes_payees, 'qr_path': qr_path})
+    return render(request, 'reservation.html',
+                  context={'commandes_payees': commandes_payees, 'offres_billets': offres_billets})
 
 
 def jeux(request):
-    return render(request,'jeux.html')
+    return render(request, 'jeux.html')
+
 
 def panier_vide(request):
-    return render(request,'Panier_vide.html')
+    return render(request, 'Panier_vide.html')
