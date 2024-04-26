@@ -17,7 +17,7 @@ header {
 }
 /*barre de nav*/
 .nav-menu{
-    background: black;
+    background: #b09f4c;
     height: 70px;
     width: 694px;
     position: absolute;
@@ -51,8 +51,7 @@ header {
 }
 div.rebours{
     flex-grow:1;
-    color: red;
-
+    color: forestgreen;
 }
 
 div.img1{

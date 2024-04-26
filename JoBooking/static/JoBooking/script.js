@@ -198,9 +198,8 @@ document.addEventListener('DOMContentLoaded',function () {
     boutonpaiement.addEventListener('click', declencherpaiement)
 });
 
-
+// BOUTON CEST PARTI DE PAGE D ACCUEIL
 document.addEventListener('DOMContentLoaded',function () {
-// BOUTON CEST PARTI DE LA PAGE D ACCUEIL
     const boutongo = document.querySelector('.btn-go')
 
     function directionpageoffre() {
@@ -209,3 +208,33 @@ document.addEventListener('DOMContentLoaded',function () {
     }
     boutongo.addEventListener('click', directionpageoffre)
 });
+
+//COMPTE A REBOURS  DE PAGE ACCUEIL
+let compterebours = new Date("July 26,2024 00:00:00").getTime()
+let x = setInterval(function (){
+    let now = new Date().getTime();
+    let distance = compterebours - now;
+    let jours=Math.floor(distance/(1000*60*60*24));
+    let heures =Math.floor(distance % (1000*60*60*24)/(1000*60*60));
+    let minutes = Math.floor(distance %(1000*60*60)/(1000*60));
+    let secondes =   Math.floor(distance % (1000*60)/1000);
+
+    let contenuHtml=`
+        <div>
+            <span>⏳${jours}</span>
+            <span class="label-jours">Jours</span>
+            <span>${heures}</span>
+            <span class="label-heures">heures</span>
+            <span>${minutes}</span>
+            <span class="label-minutes">min</span>
+            <span>${secondes}</span>
+            <span class="label-secondes">sec</span>
+        </div>`;
+
+    if (distance<0){
+        clearInterval(x);
+        contenuHtml = '<span>🎉Jour J🎉</span>'
+    }
+        document.querySelector('.rebours').innerHTML=contenuHtml
+
+},1000);
