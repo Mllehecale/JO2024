@@ -76,7 +76,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
+ // fonction pour envoyé les données du panier au back
 function dataPanier(){
     const panier=getPanier();
     const csrftoken=getCookie('csrftoken');
@@ -183,13 +183,29 @@ boutonsupp.addEventListener('click',function (){
     });
 });
 
+document.addEventListener('DOMContentLoaded',function () {
 
 //BOUTON PAIEMENT
-const boutonpaiement=document.getElementById('btn-payer')
-console.log(boutonpaiement)
-function  declencherpaiement(){
-    console.log('bouton payer opérationnel ');
-    window.location.href='payer';
-    deletePanier();
-}
-boutonpaiement.addEventListener('click',declencherpaiement)
+    const boutonpaiement = document.getElementById('btn-payer')
+    console.log(boutonpaiement)
+
+    function declencherpaiement() {
+        console.log('bouton payer opérationnel ');
+        window.location.href = 'payer';
+        deletePanier();
+    }
+
+    boutonpaiement.addEventListener('click', declencherpaiement)
+});
+
+
+document.addEventListener('DOMContentLoaded',function () {
+// BOUTON CEST PARTI DE LA PAGE D ACCUEIL
+    const boutongo = document.querySelector('.btn-go')
+
+    function directionpageoffre() {
+        console.log('bouton cest parti operationnel')
+        window.location.href = '/offres/'
+    }
+    boutongo.addEventListener('click', directionpageoffre)
+});

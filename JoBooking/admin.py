@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import CustomUser, Offre, Commande, Reservation
 
 
+# ici formulaire connexion pour acces à l'administration
 class UserCreationForm(forms.ModelForm):
     email = forms.EmailField(label='email')
     password = forms.CharField(label='Mot de passe', widget=forms.PasswordInput)
@@ -32,7 +33,7 @@ class AdminOffre(admin.ModelAdmin):
 
 
 class AdminCommande(admin.ModelAdmin):
-    list_display = ('user', 'offre_id',  'quantity', 'paiement', 'cle_paiement', 'date_commande')
+    list_display = ('user', 'offre_id', 'quantity', 'paiement', 'cle_paiement', 'date_commande')
 
 
 class AdminReservation(admin.ModelAdmin):

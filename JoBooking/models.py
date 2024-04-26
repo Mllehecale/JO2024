@@ -96,6 +96,7 @@ class Commande(models.Model):
         return self.user.email  # rappel : l'email est une donnée unique
 
 
+# modele pour la page "Mes reservations"
 class Reservation(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)  # user peut avoir qu'un seul panier (réservation)

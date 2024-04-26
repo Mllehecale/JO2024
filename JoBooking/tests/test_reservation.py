@@ -6,14 +6,27 @@ import uuid
 class TestCommande(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = CustomUser.objects.create_user(email='test@test.com', password='testtest')
+        self.user = CustomUser.objects.create_user(email='test@test.com', password='testtest',
+                                                   first_name='user', last_name='test')
 
     # test verifie si redirection vers page connexion si user non connecté
     def test_connexion_requis_panier(self):
         response = self.client.get("/commande/")
         self.assertRedirects(response, "/connexion/?next=/commande/", status_code=302)
 
-    #def test_verification_PDF_genere_transaction    :
+    # test qui verifie  pdf generee quand le paiement = True
+    def test_verification_PDF_genere_transaction(self):
+        offre = Offre.objects.create(title='offretest', price=2, id=5) #parametre necessaire  pour creer le pdf
+        date = "datetest"   #parametre necessaire  pour creer le pdf
+        commande = Commande.objects.create(user=self.user, paiement=True, offre=offre)
+        if commande.paiement is True:
+            cle_paiement = uuid.uuid4().hex #parametre necessaire  pour creer le pdf
+            commande.cle_paiement = cle_paiement
+            commande.save()
+        self.client.force_login(self.user)  # connexion de l'user
+        response = self.client.get("/telechargement_pdf/")
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertNotEqual(response.content, b'')
 
 
 class TestPaiement(TestCase):
@@ -32,6 +45,6 @@ class TestPaiement(TestCase):
             commande.save()
 
         self.client.force_login(self.user)
-        response = self.client.post("/commande/payer")
+        self.client.post("/commande/payer")
         self.assertTrue(commande.paiement)
         self.assertIsNotNone(commande.cle_paiement)
