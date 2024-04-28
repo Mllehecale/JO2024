@@ -1,4 +1,12 @@
 /*PAGE PANIER*/
+.retour-acceuil{
+    color:#a7c957;
+    position: absolute;
+    top:10px;
+    left: 10px;
+    font-weight: bold;
+}
+
 .logo-panier{
     position: relative;
     left: 500px;
@@ -32,6 +40,7 @@
     margin-top: 30px;
     border :1px solid #b09e4c;
     color: black;
+    background-color:white;
 
 
 }
@@ -46,15 +55,15 @@
 }
 
 .btn-supprimer{
-    background-color: #78CBD6;
+    background-color: #a7c957;
     color: white;
-    border: 2px solid #78CBD6;
+    border: 2px solid #a7c957;
     border-radius: 2px;
     cursor: pointer;
 }
 
 .btn-supprimer:hover{
-    background-color:#D6C278 ;
+    background-color:#bc4749;
 }
 
 .cadre-panier{
@@ -62,7 +71,7 @@
     top:20px;
     width:460px;
     height: 610px;
-    background-color: rgb(0, 0, 0);
+    background-color: #bc4749;
     margin-left:880px;
     bottom: 0;
     border-radius:6px;
@@ -84,8 +93,8 @@
     width: 256px;
     height: 50px;
     border: none;
-    background-color:lightblue;
-    color: black;
+    background-color:#a7c957;
+    color: white;
     font-size: 15px;
     font-family: "Inter Semi Bold", sans-serif;
     font-weight: bold;
@@ -112,7 +121,9 @@
     text-align: center;
     line-height: 40px;
 }
-
+.btn-validation:hover{
+    color: #D6C278;
+}
 
 .details{
     box-sizing: border-box;
@@ -143,7 +154,7 @@
     /*PAGE MES RESERVATIONS*/
 h1 {
     color: #61A7B0;
-    text-align: center;
+    text-align: left;
     font-weight: bold;
 }
 
@@ -168,7 +179,7 @@ h2 {
 
 
 /*PAGE PANIER VIDE*/
-.zero-panier {
+.zero-panier,.message-reservation {
     font-family: "Inter Semi Bold", sans-serif;
     font-size: 40px;
     color: #606F7B;
@@ -181,7 +192,7 @@ h2 {
     margin-left: 650px;
 }
 .font-paiement{
-    background-color: #ceecff;
+    background-color: #a7c957;
     margin: 0;
 }
 
@@ -230,6 +241,8 @@ h2 {
     width: 150px;
     border: none;
     border-radius: 3px;
+    color: white;
+    background-color: #D6C278;
 }
 #btn-payer{
     margin-left: 190px;

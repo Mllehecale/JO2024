@@ -1,15 +1,15 @@
 {% load static %}
 
 {% block content %}
-    <img class="logo-inscription-reussie" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="70" height="70" />
+    <img class="logo-inscription-reussie" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="60" height="70" />
 
-    <div class="bloc-inscription-reussie">
-<h1 class="inscription-reussie">Inscription réussie</h1>
-    <p> votre email a été vérifié avec succès.</p>
-    </div>
-    </div>
+<div class="bloc-inscription-reussie">
+     <h1 class="inscription-reussie">Inscription réussie</h1>
+     <p class="email-verifie"> votre email a été vérifié avec succès.</p>
+     <a  class="retour-acceuil" href="{% url 'index' %}"> > retour à la page d'Accueil</a>
+</div>
 
-    <img class="" src="{% static 'JoBooking/images/img3.jpg' %}"   alt="Logo" width="70" height="70" />
+    <img class="" src="{% static 'JoBooking/images/img3.jpg' %}"   alt="Logo" width="1350" height="600" />
 
  {% block css %}
         <link rel="stylesheet" href="{% static 'JoBooking/authentification_style.css' %}">

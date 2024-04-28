@@ -243,7 +243,7 @@ def payer(request):
             commande.cle_paiement = cle_paiement
             commande.save()
 
-            offre.ventes += commande.quantity  #   si paiement =True  ça augmente ventes de l'offre
+            offre.ventes += commande.quantity  # si paiement =True  ça augmente ventes de l'offre
             offre.save()
 
     return render(request, 'remerciements.html')
@@ -291,7 +291,7 @@ def creation_billet(user, offre, date):
     # permet affichage des cles de paiement  et plans choisi par l'user sur scan qrcode
     if commandes_payees:
         commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
-        user_name=f"{user.last_name}{user.first_name}" if user.first_name and user.last_name else""
+        user_name = f"{user.last_name}{user.first_name}" if user.first_name and user.last_name else ""
         cle_unique = f"clé inscription:{user.cle_inscription}," \
                      f"|clés paiement:{'|'.join(cles_paiement)}|titulaire:{user_name}," \
                      f"|plan(s):{commandes_str}"

@@ -7,11 +7,12 @@
     <meta name="viewport">
     <title>Jeux Olympiques France</title>
     <link rel="stylesheet" href="{% static 'JoBooking/general_style.css' %}">
+    <link rel="icon" href="{% static 'JoBooking/images/favicon.png' %}" type="image/x-icon">
 </head>
 <body >
 <header>
         <div class="logo" >
-            <img src="{% static 'JoBooking/images/logo paris.png' %}" alt="Logo" width="70" height="70" />
+            <img src="{% static 'JoBooking/images/logo paris.png' %}" alt="Logo" width="60" height="70" />
         </div>
         <div class="rebours">
         </div>
@@ -36,7 +37,6 @@
 </header>
 {% block content %}
   <main>
-        <!-- Votre contenu principal ici -->
          <div class="img1" >
             <img src="{% static 'JoBooking/images/eiffel.jpg' %}" alt="imgparis" width="655" height="400" />
         </div>
@@ -54,25 +54,28 @@
             <img src="{% static 'JoBooking/images/natation.jpg' %}" alt="natation" width="208" height="180" />
         </div>
        <div>
-           <p class="presentation">Pour célébrer le sport,Paris 2024 a choisi des disciplines de nature spectaculaires <br>et captivantes telles que l'escalade et le surf.
-          <br> Des disciplines plus jeunes sont également mises en avant. <br>Exemple: Le skateboard et le breaking.<br>
-           Un large choix pour un large public.<br>
-           Cette nouvelle édition s'inscrira dans les mémoires tout comme les éditions précédentes.<br>
-           Pour en savoir plus , <a href="{% url 'jeux' %}"> découvrez les différents jeux attendus.</a> </p>
+           <p class="presentation">Pour célébrer le sport,le comité d'organisation des Jeux olympiques France 2024 a choisi <br>des disciplines de nature spectaculaires et captivantes telles que l'escalade et le surf.<br>
+                <br> Des disciplines plus jeunes sont également mises en avant. <br>Exemple: Le skateboard et le breaking.<br>
+                <br>Le but est de faire découvrir des disciplines qui ne font pas des tournois internationaux<br>
+                en général.<br><br>
+                <br>Un large choix pour un large public.<br>
+                C'est ce qui a été penser pour les amoureux du sport.<br> Ce panel de jeux peut être une initiation pour les nouveaux sportifs de demain.<br><br>
+                <br>Cette nouvelle édition s'inscrira dans les mémoires tout comme les éditions précédentes.<br>
+                Pour en savoir plus , <a href="{% url 'jeux' %}"> découvrez les différents jeux attendus.</a> </p>
        </div>
        <div class="titre">
-           <h1>Les jeux olympiques 2024 dans la ville lumière </h1>
+           <h1>Les jeux olympiques 2024 au pays de la ville lumière </h1>
        </div>
        <div class="description">
            <p>
-               Les Jeux Olympiques représentent la plus grande célébration mondiale de l'excellence sportive, réunissant des athlètes de tous horizons pour compétitionner à travers une diversité de disciplines.
-               Cet événement quadriennal transcende les frontières nationales, unissant les nations par la compétition amicale et la poursuite de l'effort humain exceptionnel.
-               Les Jeux mettent en avant non seulement la performance athlétique exceptionnelle, mais également les valeurs d'amitié, de respect et d'excellence.
-               C'est une plateforme mondiale où les rêves des athlètes se réalisent, et où le monde se rassemble pour célébrer la passion du sport et l'unité internationale
+               Les Jeux Olympiques représentent une grande célébration mondiale de l'excellence sportive, rassemblant des athlètes de tous horizons pour compétitionner à travers divers disciplines.<br>
+               <br>Cet événement,qui a lieu tous les 4 ans, tend à unir les nations par la compétition amicale et à poursuivre l'exellence humaine.
+               Les Jeux mettent en avant non seulement la performance athlétique exceptionnelle, mais également les valeurs d'amitié, de respect et d'excellence.<br>
+               <br>C'est une scène mondiale où les rêves des athlètes se réalisent.Le monde se rassemble pour célébrer la passion du sport et l'unité internationale.
            </p>
        </div>
-       <div class="Paris">
-           <h3>Cette année, le monde se rassemble à Paris &#127939; ! </h3>
+       <div class="France">
+           <h3>Cette année, le monde se rassemble en France &#127939; ! </h3>
        </div>
        <div class="infos">
            <h2>Date de l'événement: </h2>
@@ -85,16 +88,17 @@
            </h4>
        </div>
        <div class="img2" >
-            <img src="{% static 'JoBooking/images/img2.jpg' %}" alt="course" width="690" height="370" />
+            <img src="{% static 'JoBooking/images/img2.jpg' %}" alt="course" width="690" height="390" />
         </div>
 
     </main>
-{% endblock content %}
-
-<footer>
+    <footer>
     <!-- Votre contenu du footer ici -->
     <p>&copy;Jo France 2024|Politique commerciale|Mentions Légales|site realise par InfoEvent </p>
 </footer>
+{% endblock content %}
+
+
 
 <!-- block pour js specifique à la page ,réutilisable-->
 {% block js %}

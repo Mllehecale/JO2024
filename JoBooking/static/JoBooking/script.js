@@ -153,21 +153,20 @@ boutonsReserver.forEach(bouton => {
 
         dataPanier();
     });
-
 });
 
-
+//BOUTON ANNULATION DE LA COMMANDE ENTIERE
 document.addEventListener('DOMContentLoaded',function (){
-    //BOUTON ANNULATION DE LA COMMANDE ENTIERE
 const boutonAnnulation=document.getElementById('btn-annulation')
-function declencherannulation(){
+if (boutonAnnulation){
+    function declencherannulation(){
     console.log('bouton annuler opérationnel');
     window.location.href='annulation';
     deletePanier();
-
 }
 boutonAnnulation.addEventListener('click',declencherannulation)
-})
+}
+});
 
 
 
@@ -183,33 +182,35 @@ boutonsupp.addEventListener('click',function (){
     });
 });
 
-document.addEventListener('DOMContentLoaded',function () {
 
 //BOUTON PAIEMENT
+document.addEventListener('DOMContentLoaded',function () {
     const boutonpaiement = document.getElementById('btn-payer')
     console.log(boutonpaiement)
-
-    function declencherpaiement() {
+    if (boutonpaiement){
+        function declencherpaiement() {
         console.log('bouton payer opérationnel ');
         window.location.href = 'payer';
         deletePanier();
     }
-
     boutonpaiement.addEventListener('click', declencherpaiement)
+    }
 });
+
 
 // BOUTON CEST PARTI DE PAGE D ACCUEIL
-document.addEventListener('DOMContentLoaded',function () {
-    const boutongo = document.querySelector('.btn-go')
-
+const boutongo = document.querySelector('.btn-go')
+if (boutongo){
     function directionpageoffre() {
-        console.log('bouton cest parti operationnel')
-        window.location.href = '/offres/'
-    }
-    boutongo.addEventListener('click', directionpageoffre)
-});
+    console.log('bouton cest parti operationnel')
+    window.location.href = '/offres/'
+}
+boutongo.addEventListener('click', directionpageoffre)
+}
+
 
 //COMPTE A REBOURS  DE PAGE ACCUEIL
+document.addEventListener('DOMContentLoaded',function (){
 let compterebours = new Date("July 26,2024 00:00:00").getTime()
 let x = setInterval(function (){
     let now = new Date().getTime();
@@ -236,5 +237,5 @@ let x = setInterval(function (){
         contenuHtml = '<span>🎉Jour J🎉</span>'
     }
         document.querySelector('.rebours').innerHTML=contenuHtml
-
 },1000);
+})

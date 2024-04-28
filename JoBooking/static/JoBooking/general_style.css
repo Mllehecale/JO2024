@@ -17,7 +17,7 @@ header {
 }
 /*barre de nav*/
 .nav-menu{
-    background: #b09f4c;
+    background: #bc4749;
     height: 70px;
     width: 694px;
     position: absolute;
@@ -35,6 +35,22 @@ header {
     padding:10px;
     text-decoration: none;
 }
+/*effet nav bar*/
+.menu-items:hover{
+    color: #FCD581;
+}
+.menu-items::after{
+    content:'';
+    height: 2px;
+    width:100%;
+    background: #FCD581;
+    display: flex;
+    opacity: 0;
+    transition: all 1s;
+}
+.menu-items:hover::after{
+    opacity: 1;
+}
 .menu-items-bienvenue{
     padding: 0;
     color: white;
@@ -49,15 +65,17 @@ header {
     margin-left: 10px;
 
 }
-div.rebours{
-    flex-grow:1;
-    color: forestgreen;
+.rebours{
+    position: absolute;
+    color: #a7c957;
+    left: 200px;
 }
 
 div.img1{
     opacity:80%;
     position: relative;
 }
+
 
 /* partie réservation de l'acceuil*/
 .reservation-container {
@@ -82,7 +100,7 @@ div.img1{
     position: absolute;
     width: 163px;
     height: 46px;
-    background: #FFFFFF;
+    background: #bc4749;
     border-radius: 10px;
     border: none;
     font-style: normal;
@@ -90,11 +108,11 @@ div.img1{
     font-weight: bold;
     line-height: 29px;
     text-align: center;
-    color: #0E7177;
+    color: white;
     cursor:pointer;
 }
 .btn-go:hover {
-    background-color:aqua;
+    background-color: #b09e4c;
     color:white;
 }
 
@@ -102,11 +120,12 @@ div.img1{
 
 .presentation{
     padding-left: 10px;
-    color:black;
+    color: black;
     font-size:18px;
+
 }
 .presentation a{
-    color: #0E7177;
+    color: #78CBD6;
 }
 /* Description JO et infos */
 
@@ -130,11 +149,11 @@ div.img1{
     max-width: 650px;
 }
 
-.Paris {
+.France {
     position: absolute;
-    top: 350px;
+    top: 390px;
     left:800px;
-    color:#D6C278;
+    color:#a7c957;
 }
 .infos{
     position: absolute;
@@ -143,7 +162,7 @@ div.img1{
     max-width: 650px;
 }
 .infos h2{
-   color: #063f42;
+   color: #78CBD6;
 }
 
 .img2{
@@ -165,8 +184,9 @@ footer {
 }
 footer p{
     width: 1317px;
-    background-color: rgb(176, 158, 76); /* Couleur de fond du footer */
+    background-color:#a7c957; /* Couleur de fond du footer */
     text-align: center;
     padding: 15px;
+    margin-bottom: 0;
 
 }

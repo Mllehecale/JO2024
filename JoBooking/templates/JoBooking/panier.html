@@ -1,7 +1,8 @@
 {% load static %}
 {% block content %}
-    <img class="logo-panier" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="70" height="70" />
+    <img class="logo-panier" src="{% static 'JoBooking/images/logo paris.png' %}"   alt="Logo" width="60" height="70" />
     <h1 class="mon-panier"> Mon panier</h1>
+    <a href="{% url 'index' %}"><p class="retour-acceuil">> Retour à l'Accueil</p></a>
 
 <div class="conteneur-panier">
 <div class="details">
