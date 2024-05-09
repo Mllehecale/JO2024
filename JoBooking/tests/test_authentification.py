@@ -27,8 +27,8 @@ class TestAuthentification(TestCase):
 class TestInscriptionAuthentification(TestCase):
     def setUp(self):
         self.client = Client()
-        # test qui verifie si form valide lors de l'inscription, renvoie vers la page verification email
 
+        # test qui verifie si form valide lors de l'inscription, renvoie vers la page verification email
     def test_inscription_verification_email(self):
         user_form = {
             'first_name': 'user',
@@ -56,4 +56,4 @@ class TestDeconnexion(TestCase):
         self.client.get("/deconnexion/")
 
         self.assertNotIn('_auth_user_id', self.client.session)
-        #verification si présence de l'idenfifiant de l'user connecté dans session
+        # verification si présence de l'idenfifiant de l'user connecté dans session

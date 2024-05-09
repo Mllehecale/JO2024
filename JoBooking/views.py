@@ -1,3 +1,4 @@
+import io
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import Connexion
@@ -19,8 +20,8 @@ from PyPDF2 import PdfMerger, PdfReader
 from io import BytesIO
 from django.http import HttpResponse
 import qrcode
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
+import boto3
+from botocore.client import Config
 
 
 # méthode pour créer un formulaire d'inscription (utilisation du formulaire émit par django par défaut)
@@ -54,12 +55,12 @@ def index(request):
 
 # view pour la page des offres
 def offres(request):
-    list_offres = Offre.objects.all()  # affiche toutes les offres  = plan solo,duo,family ou autre
+    list_offres = Offre.objects.all().order_by('id')  # affiche toutes les offres  = plan solo,duo,team ou autre
     commandes_user = {}  # creation dictionnaire pour offre deja acheté
     if request.user.is_authenticated:
         commandes_utilisateur = Commande.objects.filter(user=request.user)
-        for commande in commandes_utilisateur:
-            commandes_user[commande.offre_id] = True  # recupération de l'id
+        for com in commandes_utilisateur:
+            commandes_user[com.offre_id] = True  # recupération de l'id
     context = {'offres': list_offres, 'commandes_user': commandes_user}
     return render(request, 'JoBooking/offres.html', context)
 
@@ -158,7 +159,7 @@ def connexion(request):
 
             if user is not None:  # signification : si l'user a été trouvée ...
                 login(request, user, backend='JoBooking.authbackends.EmailAuthBackend')  # ya 2 backends d'auth
-                message = f'Bienvenue {user.first_name} ! Vous êtes connecté.'
+                f'Bienvenue {user.first_name} ! Vous êtes connecté.'
                 return redirect('/')  # redirige vers la page d'acceuil
             else:
                 message = 'Identifiants non valides.'
@@ -187,12 +188,12 @@ def commande(request):
             for offre_id, offre_data in panier_data['panier'].items():
                 offre_id = offre_data['id']
                 # offre_quantity = offre_data['quantity']
-                commande, created = Commande.objects.get_or_create(user=user,
-                                                                   offre_id=offre_id)  # récupération commande
+                com, created = Commande.objects.get_or_create(user=user,
+                                                              offre_id=offre_id)  # récupération commande
                 if created:  # exemple:  une offre n'est pas dans la commande donc elle sera crée #
                     # else:   l'offre est deja dans la commande donc on augmente la quantité
                     # commande.quantity = offre_quantity
-                    commande.save()
+                    com.save()
     # récupération des commandes impayées ( par defaut paimement = False car pas encore payé)
     commandes_impayees = Commande.objects.filter(user=request.user, paiement=False)
 
@@ -206,9 +207,9 @@ def commande(request):
 def annulation(request):
     commandes_impayees = Commande.objects.filter(user=request.user, paiement=False)
     if commandes_impayees:
-        for commande in commandes_impayees:
-            commande.quantity = 0
-            commande.save()
+        for com in commandes_impayees:
+            com.quantity = 0
+            com.save()
     commandes_impayees.delete()  # suppression commandes impayés dans le panier.s
 
     return redirect('index')  # retourne vers la page d'accueil
@@ -234,35 +235,36 @@ def payer(request):
     user = request.user
     commandes_impayees = Commande.objects.filter(user=user, paiement=False)
 
-    for commande in commandes_impayees:
-        offre = commande.offre  # récupration du plan dans la commande
-        commande.paiement = True  # les commandes sont payés
-        commande.save()
-        if commande.paiement is True:
+    for com in commandes_impayees:
+        offre = com.offre  # récupration du plan dans la commande
+        com.paiement = True  # les commandes sont payés
+        com.save()
+        if com.paiement is True:
             cle_paiement = uuid.uuid4().hex
-            commande.cle_paiement = cle_paiement
-            commande.save()
+            com.cle_paiement = cle_paiement
+            com.save()
 
-            offre.ventes += commande.quantity  # si paiement =True  ça augmente ventes de l'offre
+            offre.ventes += com.quantity  # si paiement =True  ça augmente ventes de l'offre
             offre.save()
 
     return render(request, 'remerciements.html')
 
 
 def telechargement_pdf(request):
-    user = request.user
-    pdf_commandes = []
-    filename = "BilletsJo.pdf"
-    commandes_payees = Commande.objects.filter(user=user, paiement=True)
+    if isinstance(request.user, CustomUser):
+        user = request.user
+        pdf_commandes = []
+        filename = "BilletsJo.pdf"
+        commandes_payees = Commande.objects.filter(user=user, paiement=True)
 
-    for commande in commandes_payees:
-        offre = commande.offre  # récupration du plan dans la commande
-        date = commande.date_commande
-        pdf_telechageable = creation_billet(user, offre, date)
-        pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
-        pdf_commandes.append(pdf_content)
-    pdf_fusion = fusion_pdf(pdf_commandes, filename)  # redirige user vers page de remerciements si pdf
-    return pdf_fusion
+        for com in commandes_payees:
+            offre = com.offre  # récupration du plan dans la commande
+            date = com.date_commande
+            pdf_telechageable = creation_billet(user, offre, date)
+            pdf_content_str = pdf_telechageable.output(dest='S').encode('latin1')  # a faire selon la doc fpdf
+            pdf_commandes.append(pdf_content_str)
+        pdf_fusion = fusion_pdf(pdf_commandes, filename)  # redirige user vers page de remerciements si pdf
+        return pdf_fusion
 
 
 def paiement(request):
@@ -270,30 +272,28 @@ def paiement(request):
     user = request.user
     commandes_impayees = Commande.objects.filter(user=user, paiement=False)
     if commandes_impayees:
-        for commande in commandes_impayees:
-            total += commande.offre.price
+        for com in commandes_impayees:
+            total += com.offre.price
     return render(request, 'paiement.html', context={'commandes_impayees': commandes_impayees, 'total': total})
 
 
-# création billets  téléchargeables + qr code
+# création d'un pdf contenant billet (selon nb de billet de offre)
 def creation_billet(user, offre, date):
     pdfs = []
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('helvetica', size=12)
-    cle_unique = ""
-    cles_paiement = []  # un user peut avoir plusieurs commandes donc plusieurs clés de paiements
+    # cle_unique = ""
+    # un user peut avoir plusieurs commandes donc plusieurs clés de paiements
     # creation qr code + concaténation : clé inscription et clé paiment,  unique à chaque user
     commandes_payees = Commande.objects.filter(user=user, paiement=True)
-    print("commandes payées:", commandes_payees)
-    for commande in commandes_payees:
-        cles_paiement.append(commande.cle_paiement)
-    # permet affichage des cles de paiement  et plans choisi par l'user sur scan qrcode
-    if commandes_payees:
-        commandes_str = '|'.join([str(commande.offre) for commande in commandes_payees])
-        user_name = f"{user.last_name}{user.first_name}" if user.first_name and user.last_name else ""
-        cle_unique = f"clé inscription:{user.cle_inscription}," \
-                     f"|clés paiement:{'|'.join(cles_paiement)}|titulaire:{user_name}," \
+    for com in commandes_payees:
+        # permet affichage des cles de paiement  et plans choisi par l'user sur scan qrcode
+        commandes_str = '|'.join([str(com.offre) for com in commandes_payees])
+        cles_paiement = '|'.join([str(com.cle_paiement) for com in commandes_payees])
+        user_name = f"{user.last_name} {user.first_name}" if user.first_name and user.last_name else ""
+        cle_unique = f"clé inscription:{user.cle_inscription}" \
+                     f"|clés paiement:{cles_paiement}|titulaire:{user_name}" \
                      f"|plan(s):{commandes_str}"
         # creation du qrcode
         qr = qrcode.make(cle_unique)
@@ -304,24 +304,30 @@ def creation_billet(user, offre, date):
         position_y = 35
         # ajout logo sur billet
 
-        for billet in range(offre.billet):
+        # un pdf contient nb de billet selon offre
+        for b in range(offre.billet):
             pdf.cell(0, 10, "_______________________________________________________________________________", ln=True,
                      align="LEFT")
-            pdf.cell(0, 10, "   BILLET(S) POUR LES JEUX OLYMPIQUES PARIS 2024 ", ln=True, align="CENTER")
+            pdf.cell(0, 10, "   BILLET(S) POUR LES JEUX OLYMPIQUES FRANCE 2024 ", ln=True, align="CENTER")
             pdf.cell(0, 5, "_______________________________________________________________________________", ln=True,
                      align="LEFT")
             pdf.cell(0, 10, f'Titulaire du billet: {user.last_name} {user.first_name}', ln=True, align="LEFT")
             pdf.cell(0, 10, f'Plan: {offre}', ln=True, align="LEFT")
             pdf.cell(0, 10, f'Date & Heure réservation:{date}', ln=True, align="LEFT")
 
-            y = position_y + billet * espace_y  # calcul pour dynamiser la position de y
+            y = position_y + b * espace_y  # calcul pour dynamiser la position de y
             pdf.image(qr_path, x=170, y=y, w=30, h=30)
 
-    pdfs.append(pdf)
-    print("nombre de pdf vue creation:", len(pdfs))
-    return pdf
+        # user_name = f"{user.last_name}{user.first_name}" if user.first_name and user.last_name else ""
+        # pdf_output_file = f"billet_{offre.title}_{user_name}.pdf"
+        # pdf.output(pdf_output_file)
+
+        pdfs.append(pdf)
+        print(" pdf vue creation:", len(pdfs))  # doit avoir un seul pdf
+        return pdf
 
 
+#  code pour fusionner pdf si plusieurs commandes
 def fusion_pdf(pdf_contents, filename):
     merger = PdfMerger()
     output = BytesIO()
@@ -338,38 +344,53 @@ def fusion_pdf(pdf_contents, filename):
     return response
 
 
-@login_required(login_url='connexion')  # connexion nécessaire pour avoir accès a cette page
+@login_required(login_url='connexion')  # connexion nécessaire pour avoir accès  page reservation
 def reservation(request):
-    offres_billets = []
-    reservation_user, created = Reservation.objects.get_or_create(user=request.user)
-    commandes_payees = Commande.objects.filter(user=request.user, paiement=True)
+    if isinstance(request.user, CustomUser):
+        reservation_user, created = Reservation.objects.get_or_create(user=request.user)
+        commandes_payees = Commande.objects.filter(user=request.user, paiement=True)
 
-    user = request.user
-    if created:
-        reservation_user.commandes.set(commandes_payees)
-        reservation_user.save()
-    else:
-        for commande in commandes_payees:
-            if commande.billet_pdf:
-                billet_telechargement = commande.billet_pdf.url
-            else:
-                user = request.user
-                offre = commande.offre  # récupration du plan dans la commande
-                date = commande.date_commande
-                pdf_telechageable = creation_billet(user, offre, date)
-                pdf_content = pdf_telechageable.output(dest='S').decode('latin1').encode('latin1')
-                file_name = f"billet_{commande.offre.title}.pdf"
-                file_path = default_storage.save(file_name, ContentFile(pdf_content))
-                commande.billet_pdf.name = file_path
-                billet_telechargement = default_storage.url(file_path)
+        user = request.user
+        pdf_url = None
+        if created:
+            reservation_user.commandes.set(commandes_payees)
+            reservation_user.save()
+        else:
+            for com in commandes_payees:
+                if com.billet_pdf:
+                    pdf_url = com.billet_pdf
+                else:
+                    user = request.user
+                    offre = com.offre  # récupration du plan dans la commande
+                    date = com.date_commande
+                    pdf_telechageable = creation_billet(user, offre, date)
+                    pdf_content = pdf_telechageable.output(dest='S').encode('latin1')
+                    print('contenu:', len(pdf_content))
+                    file_name = f"billet_{com.offre.title}_{user.last_name}{user.first_name}.pdf"
 
-            offres_billets.append({'offre': commande.offre, 'billet_telechargement': billet_telechargement})
-            if commande not in reservation_user.commandes.all():
-                reservation_user.commandes.add(commande)
-        reservation_user.save()
+                    # operation qui permet de telecharger PDF via le bucket  sur s3
+                    # ajouter s3v4 car sinon pdf inacessible via bucket
+                    s3_client = boto3.client('s3', region_name='eu-west-3', config=Config(signature_version='s3v4'))
+                    bucket_name = 'bucketjofrancehecale'
+                    key = file_name
+                    expiration = 3600  # pour ce projet  on definit une expiration d'1h
+                    pdf_url = s3_client.generate_presigned_url('get_object',
+                                                               Params={'Bucket': bucket_name, 'Key': key},
+                                                               ExpiresIn=expiration,
+                                                               HttpMethod='GET'
+                                                               )
+                    com.billet_pdf = pdf_url
+                    com.save()
+                    # operation qui permet de stocker le pdf dans le bucket sur S3
+                    with io.BytesIO(pdf_content) as f:
+                        s3_client.upload_fileobj(f, bucket_name, key, ExtraArgs={'ContentType': 'application/pdf'})
 
-    return render(request, 'reservation.html',
-                  context={'commandes_payees': commandes_payees, 'offres_billets': offres_billets})
+                if com not in reservation_user.commandes.all():
+                    reservation_user.commandes.add(com)
+            reservation_user.save()
+
+        return render(request, 'reservation.html',
+                      context={'commandes_payees': commandes_payees, 'pdf_url': pdf_url})
 
 
 def jeux(request):

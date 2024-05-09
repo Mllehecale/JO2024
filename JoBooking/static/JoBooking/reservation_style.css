@@ -152,6 +152,10 @@
 
 
     /*PAGE MES RESERVATIONS*/
+.reservation-top{
+    margin-left: 20px;
+}
+
 h1 {
     color: #61A7B0;
     text-align: left;
@@ -164,19 +168,19 @@ h2 {
 
 .offre-achete {
     margin-top: 50px;
-    margin-left: 150px;
+    margin-left: 250px;
     box-sizing: border-box;
     border: 2px solid #D6C278;
     color: #606F7B;
-    width: 80%;
+    width: 60%;
+    background-color: white;
 }
 
 .commande-confirme {
-    margin-left: 850px;
+    margin-left: 650px;
     color: #B0A9A9;
 
 }
-
 
 /*PAGE PANIER VIDE*/
 .zero-panier,.message-reservation {

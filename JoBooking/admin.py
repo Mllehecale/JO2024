@@ -44,3 +44,8 @@ admin.site.register(CustomUser, AdminInterface, )
 admin.site.register(Offre, AdminOffre)
 admin.site.register(Commande, AdminCommande)
 admin.site.register(Reservation, AdminReservation)
+
+# modification interface admin
+admin.site.site_title = 'Jeux olympiques Gestion'
+admin.site.site_header = 'Jeux olympiques Gestion'
+admin.site.index_title = 'Jeux olympiques Gestion'

@@ -87,7 +87,7 @@ class Commande(models.Model):
     paiement = models.BooleanField(default=False)
     date_commande = models.DateTimeField(auto_now=True)
     cle_paiement = models.CharField(max_length=100, unique=True, blank=True, null=True)
-    billet_pdf = models.FileField(upload_to='billets/', blank=True, null=True)
+    billet_pdf = models.FileField(upload_to='billets/', blank=True, null=True, max_length=500)
 
     def __str__(self):
         return f'{self.offre.title}({self.quantity})'

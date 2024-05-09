@@ -2,22 +2,22 @@
 {% load static %}
 
 {% block content %}
-<div>
+
+<div class="reservation-top">
+    <div>
     <h1>Mes Réservations </h1>
 </div>
 <h4>Vous pouvez retrouver ici, l'ensemble de vos réservations.Pour retrouver vos commandes en cours,</h4>
  <a href="{% url 'commande' %}" style="color: #a7c957;text-decoration: none;font-weight: bold">Rendez-vous la page panier</a>
+</div>
 {% if commandes_payees %}
     {% for commande in commandes_payees %}
         <div class="offre-achete">
             <h2>{{commande.offre.title}}</h2>
             <p>Date & heure de la réservation :{{ commande.date_commande }}</p>
             <p class="commande-confirme">✅ Confirmé</p>
-            {% if commande.billet_pdf %}
-            <a href="{{ commande.billet_pdf.url }}" download="">Billet</a>
-            {% else %}
-                <p>pas de billet disponible</p>
-            {% endif %}
+            <a href="{{ commande.billet_pdf}}" download="billet_{{ commande.offre.title }}_{{commande.user.last_name }}.pdf">Billet</a>
+
         </div>
     {% endfor %}
 {% else %}

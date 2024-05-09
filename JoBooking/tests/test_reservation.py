@@ -3,6 +3,8 @@ from JoBooking.models import CustomUser, Commande, Offre
 import uuid
 
 
+# code lancement du test =   python manage.py test JoBooking.tests.test_nom_file
+
 class TestCommande(TestCase):
     def setUp(self):
         self.client = Client()
@@ -16,17 +18,31 @@ class TestCommande(TestCase):
 
     # test qui verifie  pdf generee quand le paiement = True
     def test_verification_PDF_genere_transaction(self):
-        offre = Offre.objects.create(title='offretest', price=2, id=5) #parametre necessaire  pour creer le pdf
-        date = "datetest"   #parametre necessaire  pour creer le pdf
+        offre = Offre.objects.create(title='offretest', price=2, id=5)  # parametre necessaire  pour creer le pdf
+        date = "datetest"  # parametre necessaire  pour creer le pdf
         commande = Commande.objects.create(user=self.user, paiement=True, offre=offre)
         if commande.paiement is True:
-            cle_paiement = uuid.uuid4().hex #parametre necessaire  pour creer le pdf
+            cle_paiement = uuid.uuid4().hex  # parametre necessaire  pour creer le pdf
             commande.cle_paiement = cle_paiement
             commande.save()
         self.client.force_login(self.user)  # connexion de l'user
         response = self.client.get("/telechargement_pdf/")
         self.assertEqual(response['Content-Type'], 'application/pdf')
         self.assertNotEqual(response.content, b'')
+
+    # test qui verifie si renvoi vers page panier vide si pas encore de commande
+    def test_renvoi_panier_vide(self):
+        self.client.force_login(self.user)
+        response = self.client.get("/commande/")
+        self.assertTemplateUsed(response, "panier_vide.html")
+
+    # test qui annulation d'un panier
+    def test_annulation_commande(self):
+        self.client.force_login(self.user)
+        offre = Offre.objects.create(title='offretest', price=2, id=5)
+        Commande.objects.create(user=self.user, paiement=False, offre=offre)
+        response = self.client.get("/commande/annulation")
+        self.assertRedirects(response, "/")  # doit rediriger vers page d'acceuil
 
 
 class TestPaiement(TestCase):

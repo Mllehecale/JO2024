@@ -1,7 +1,7 @@
 from django.test import TestCase
 from JoBooking.models import CustomUser, Offre
 
-
+# code lancement du test =   python manage.py test JoBooking.tests.test_nom_file
 # BUT : VERIFICATION SI ENREGISTREMENT DATA DANS BDD
 
 
